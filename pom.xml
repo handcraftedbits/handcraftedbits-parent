@@ -140,6 +140,10 @@
                 <goals>
                   <goal>check</goal>
                 </goals>
+                <configuration>
+                  <maxRank>20</maxRank>
+                  <threshold>Low</threshold>
+                </configuration>
               </execution>
             </executions>
           </plugin>
