@@ -25,6 +25,7 @@
 
   <artifactId>handcraftedbits-parent-java</artifactId>
   <packaging>pom</packaging>
+  <version>1.0.3</version>
   <name>HandcraftedBits Parent POM for Java Projects</name>
   <description>A parent POM used by HandcraftedBits Java projects.</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
@@ -39,7 +40,7 @@
   <properties>
     <version.java>1.7</version.java>
     
-    <version.dep.codequality>1.0.0</version.dep.codequality>
+    <version.dep.codequality>1.0.1</version.dep.codequality>
     <version.dep.junit>4.12</version.dep.junit>
     
     <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
