@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  #%L
+  HandcraftedBits Parent POM
+  %%
+  Copyright (C) 2015 HandcraftedBits
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>handcraftedbits-parent-java</artifactId>
+  <packaging>pom</packaging>
+  <name>HandcraftedBits Parent POM for Java Projects</name>
+  <description>A parent POM used by HandcraftedBits Java projects.</description>
+  <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
+  <inceptionYear>2015</inceptionYear>
+
+  <parent>
+    <groupId>com.handcraftedbits</groupId>
+    <artifactId>handcraftedbits-parent</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <version.java>1.7</version.java>
+    
+    <version.dep.codequality>1.0.0</version.dep.codequality>
+    <version.dep.junit>4.12</version.dep.junit>
+    
+    <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
+    <version.plugin.compiler>3.3</version.plugin.compiler>
+    <version.plugin.findbugs>3.0.3</version.plugin.findbugs>
+    <version.plugin.javadoc>2.10.3</version.plugin.javadoc>
+    <version.plugin.source>2.4</version.plugin.source>
+  </properties>
+
+  <profiles>
+    <!-- Plugins for Java projects -->
+    <profile>
+      <id>java-project</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/java</exists>
+        </file>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>${version.dep.junit}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>${version.plugin.compiler}</version>
+              <configuration>
+                <source>${version.java}</source>
+                <target>${version.java}</target>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>${version.plugin.findbugs}</version>
+            <executions>
+              <execution>
+                <id>check-findbugs</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <maxRank>20</maxRank>
+                  <threshold>Low</threshold>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>${version.plugin.checkstyle}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.handcraftedbits</groupId>
+                <artifactId>handcraftedbits-codequality</artifactId>
+                <version>${version.dep.codequality}</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>check-style</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <configLocation>checkstyle_handcraftedbits.xml</configLocation>
+              <logViolationsToConsole>true</logViolationsToConsole>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${version.plugin.javadoc}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${version.plugin.source}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
