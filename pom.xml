@@ -65,20 +65,15 @@
     <name.license>apache_v2</name.license>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <version.java>1.7</version.java>
     
-    <version.dep.codequality>1.0.0</version.dep.codequality>
-    <version.dep.junit>4.12</version.dep.junit>
-    
-    <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
-    <version.plugin.compiler>3.3</version.plugin.compiler>
-    <version.plugin.findbugs>3.0.3</version.plugin.findbugs>
     <version.plugin.gpg>1.6</version.plugin.gpg>
-    <version.plugin.javadoc>2.10.3</version.plugin.javadoc>
     <version.plugin.license>1.8</version.plugin.license>
     <version.plugin.nexus-staging>1.6.5</version.plugin.nexus-staging>
-    <version.plugin.source>2.4</version.plugin.source>
   </properties>
+
+  <modules>
+    <module>handcraftedbits-parent-java</module>
+  </modules>
 
   <build>
     <resources>
@@ -86,122 +81,10 @@
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
-      <resource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>
-      </resource>
     </resources>
   </build>
 
   <profiles>
-    <!-- Plugins for Java projects -->
-    <profile>
-      <id>java-project</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <file>
-          <exists>${basedir}/src/main/java</exists>
-        </file>
-      </activation>
-
-      <dependencies>
-        <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>${version.dep.junit}</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>${version.plugin.compiler}</version>
-              <configuration>
-                <source>${version.java}</source>
-                <target>${version.java}</target>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-        
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>${version.plugin.findbugs}</version>
-            <executions>
-              <execution>
-                <id>check-findbugs</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-                <configuration>
-                  <maxRank>20</maxRank>
-                  <threshold>Low</threshold>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>${version.plugin.checkstyle}</version>
-            <dependencies>
-              <dependency>
-                <groupId>com.handcraftedbits</groupId>
-                <artifactId>handcraftedbits-codequality</artifactId>
-                <version>${version.dep.codequality}</version>
-              </dependency>
-            </dependencies>
-            <executions>
-              <execution>
-                <id>check-style</id>
-                <phase>process-classes</phase>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <configLocation>checkstyle_handcraftedbits.xml</configLocation>
-              <logViolationsToConsole>true</logViolationsToConsole>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${version.plugin.javadoc}</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>${version.plugin.source}</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    
     <!-- Release/deploy to Maven Central -->
     <profile>
       <id>release</id>
