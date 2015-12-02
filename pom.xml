@@ -29,7 +29,7 @@
   <name>HandcraftedBits Parent POM</name>
   <description>A parent POM used by HandcraftedBits projects.</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.0.2</version>
+  <version>1.0.4</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>
