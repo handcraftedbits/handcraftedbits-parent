@@ -27,9 +27,9 @@
   <artifactId>handcraftedbits-parent</artifactId>
   <packaging>pom</packaging>
   <name>HandcraftedBits Parent POM</name>
-  <description>A parent POM used by HandcraftedBits projects.</description>
+  <description>A parent POM used by HandcraftedBits projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.0.4</version>
+  <version>1.1.0</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>

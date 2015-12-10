@@ -25,14 +25,14 @@
   <artifactId>handcraftedbits-parent-java</artifactId>
   <packaging>pom</packaging>
   <name>HandcraftedBits Parent POM for Java Projects</name>
-  <description>A parent POM used by HandcraftedBits Java projects.</description>
+  <description>A parent POM used by HandcraftedBits Java projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
   <inceptionYear>2015</inceptionYear>
 
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.0.4</version>
+    <version>1.1.0</version>
   </parent>
 
   <scm>
@@ -46,6 +46,10 @@
   </issueManagement>
 
   <properties>
+    <coverage.minimum>0.00</coverage.minimum>
+    <coverage.skip>false</coverage.skip>
+    <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
+    <javadoc.skip>false</javadoc.skip>
     <version.java>1.7</version.java>
 
     <version.dep.codequality>1.0.1</version.dep.codequality>
@@ -54,104 +58,203 @@
     <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
     <version.plugin.compiler>3.3</version.plugin.compiler>
     <version.plugin.findbugs>3.0.3</version.plugin.findbugs>
+    <version.plugin.jacoco>0.7.5.201505241946</version.plugin.jacoco>
     <version.plugin.javadoc>2.10.3</version.plugin.javadoc>
     <version.plugin.source>2.4</version.plugin.source>
+    <version.plugin.surefire>2.19</version.plugin.surefire>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>${version.dep.testng}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <profiles>
+    <!-- Basic settings for Java projects. -->
+    <profile>
+      <id>java-project</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/java</exists>
+        </file>
+      </activation>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${version.plugin.compiler}</version>
-          <configuration>
-            <source>${version.java}</source>
-            <target>${version.java}</target>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>${version.plugin.compiler}</version>
+              <configuration>
+                <source>${version.java}</source>
+                <target>${version.java}</target>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
 
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${version.plugin.findbugs}</version>
-        <executions>
-          <execution>
-            <id>check-findbugs</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>${version.plugin.findbugs}</version>
+            <executions>
+              <execution>
+                <id>check-findbugs</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <maxRank>20</maxRank>
+                  <threshold>Low</threshold>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>${version.plugin.checkstyle}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.handcraftedbits</groupId>
+                <artifactId>handcraftedbits-codequality</artifactId>
+                <version>${version.dep.codequality}</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>check-style</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
             <configuration>
-              <maxRank>20</maxRank>
-              <threshold>Low</threshold>
+              <configLocation>checkstyle_handcraftedbits.xml</configLocation>
+              <logViolationsToConsole>true</logViolationsToConsole>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${version.plugin.checkstyle}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.handcraftedbits</groupId>
-            <artifactId>handcraftedbits-codequality</artifactId>
-            <version>${version.dep.codequality}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>check-style</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <configLocation>checkstyle_handcraftedbits.xml</configLocation>
-          <logViolationsToConsole>true</logViolationsToConsole>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${version.plugin.javadoc}</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>${version.plugin.source}</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${version.plugin.javadoc}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>javadoc-no-fork</goal>
+                </goals>
+                <configuration>
+                  <skip>${javadoc.skip}</skip>
+                  <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${version.plugin.source}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <!-- Unit test and code coverage support. -->
+    <profile>
+      <id>unit-test</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/test/java</exists>
+        </file>
+      </activation>
+      
+      <dependencies>
+        <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>${version.dep.testng}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${version.plugin.surefire}</version>
+            <configuration>
+              <argLine>${coverage.surefire.args}</argLine>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${version.plugin.jacoco}</version>
+            <executions>
+              <execution>
+                <id>jacoco-unit-test-prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+                <configuration>
+                  <skip>${coverage.skip}</skip>
+                  <destFile>${project.build.directory}/coverage/jacoco-unit.exec</destFile>
+                  <propertyName>coverage.surefire.args</propertyName>
+                </configuration>
+              </execution>
+              <execution>
+                <id>jacoco-unit-test-check</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <skip>${coverage.skip}</skip>
+                  <dataFile>${project.build.directory}/coverage/jacoco-unit.exec</dataFile>
+                  <rules>
+                    <rule>
+                      <element>CLASS</element>
+                      <excludes>
+                        <exclude>*IT</exclude>
+                        <exclude>*Test</exclude>
+                      </excludes>
+                      <limits>
+                        <limit>
+                          <counter>INSTRUCTION</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${coverage.minimum}</minimum>
+                        </limit>
+                      </limits>
+                    </rule>
+                  </rules>
+                </configuration>
+              </execution>
+              <execution>
+                <id>jacoco-unit-test-report</id>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+                <configuration>
+                  <skip>${coverage.skip}</skip>
+                  <dataFile>${project.build.directory}/coverage/jacoco-unit.exec</dataFile>
+                  <outputDirectory>${project.build.directory}/coverage/unit</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
