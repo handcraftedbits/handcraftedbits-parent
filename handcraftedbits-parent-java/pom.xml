@@ -32,7 +32,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.1.2-SNAPSHOT</version>
   </parent>
 
   <scm>
@@ -215,6 +215,17 @@
                 </configuration>
               </execution>
               <execution>
+                <id>jacoco-unit-test-report</id>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+                <configuration>
+                  <skip>${coverage.skip}</skip>
+                  <dataFile>${project.build.directory}/coverage/jacoco-unit.exec</dataFile>
+                  <outputDirectory>${project.build.directory}/coverage/unit</outputDirectory>
+                </configuration>
+              </execution>
+              <execution>
                 <id>jacoco-unit-test-check</id>
                 <goals>
                   <goal>check</goal>
@@ -238,17 +249,6 @@
                       </limits>
                     </rule>
                   </rules>
-                </configuration>
-              </execution>
-              <execution>
-                <id>jacoco-unit-test-report</id>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-                <configuration>
-                  <skip>${coverage.skip}</skip>
-                  <dataFile>${project.build.directory}/coverage/jacoco-unit.exec</dataFile>
-                  <outputDirectory>${project.build.directory}/coverage/unit</outputDirectory>
                 </configuration>
               </execution>
             </executions>
