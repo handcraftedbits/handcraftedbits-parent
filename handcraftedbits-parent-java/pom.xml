@@ -32,7 +32,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.4-SNAPSHOT</version>
   </parent>
 
   <scm>
@@ -148,6 +148,9 @@
                 <configuration>
                   <skip>${javadoc.skip}</skip>
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
+                  <links>
+                    <link>https://docs.oracle.com/javaee/7/api/</link>
+                  </links>
                 </configuration>
               </execution>
             </executions>
