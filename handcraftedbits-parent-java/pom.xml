@@ -32,7 +32,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
   </parent>
 
   <scm>
@@ -196,6 +196,8 @@
             <version>${version.plugin.surefire}</version>
             <configuration>
               <argLine>${coverage.surefire.args}</argLine>
+              <parallel>classes</parallel>
+              <threadCount>4</threadCount>
             </configuration>
           </plugin>
           <plugin>
