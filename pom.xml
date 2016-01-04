@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  #%L
-  HandcraftedBits Parent POM
-  %%
-  Copyright (C) 2015 HandcraftedBits
-  %%
+  Copyright (C) 2015-2016 HandcraftedBits
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-  
-       http://www.apache.org/licenses/LICENSE-2.0
-  
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  #L%
-  -->
+-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -29,7 +25,7 @@
   <name>HandcraftedBits Parent POM</name>
   <description>A parent POM used by HandcraftedBits projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.1.4</version>
+  <version>1.2.0</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>
@@ -62,12 +58,13 @@
   </issueManagement>
 
   <properties>
-    <name.license>apache_v2</name.license>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+   
+    <version.dep.handcraftedbits-license>1.0.0</version.dep.handcraftedbits-license>
     
     <version.plugin.gpg>1.6</version.plugin.gpg>
-    <version.plugin.license>1.8</version.plugin.license>
+    <version.plugin.license>2.11</version.plugin.license>
     <version.plugin.nexus-staging>1.6.5</version.plugin.nexus-staging>
   </properties>
 
@@ -145,40 +142,38 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
+            <groupId>com.mycila</groupId>
             <artifactId>license-maven-plugin</artifactId>
             <version>${version.plugin.license}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.handcraftedbits</groupId>
+                <artifactId>handcraftedbits-license</artifactId>
+                <version>${version.dep.handcraftedbits-license}</version>
+              </dependency>
+            </dependencies>
             <executions>
               <execution>
                 <id>update-copyright</id>
                 <phase>process-sources</phase>
                 <goals>
-                  <goal>update-file-header</goal>
+                  <goal>format</goal>
                 </goals>
                 <configuration>
-                  <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                  <licenseName>${name.license}</licenseName>
-                  <roots combine.children="append">
-                    <root>.</root>
-                  </roots>
+                  <aggregate>true</aggregate>
+                  <header>license/ASL2</header>
+                  <headerDefinitions>
+                    <headerDefinition>license/style/xmlstyle.xml</headerDefinition>
+                  </headerDefinitions>
                   <includes combine.children="append">
-                    <include>pom.xml</include>
-                    <include>src/main/java/**/*</include>
-                    <include>src/main/resources/**/*.properties</include>
-                    <include>src/main/resources/**/*.xml</include>
-                    <include>src/test/java/**/*</include>
+                    <include>**/pom.xml</include>
+                    <include>**/*.java</include>
+                    <include>**/src/main/resources/**/*.properties</include>
+                    <include>**/src/main/resources/**/*.xml</include>
+                    <include>**/src/test/resources/**/*.properties</include>
+                    <include>**/src/test/resources/**/*.xml</include>
                   </includes>
-                </configuration>
-              </execution>
-              <execution>
-                <id>update-license</id>
-                <phase>process-sources</phase>
-                <goals>
-                  <goal>update-project-license</goal>
-                </goals>
-                <configuration>
-                  <licenseName>${name.license}</licenseName>
-                  <licenseFile>${basedir}/LICENSE</licenseFile>
+                  <lineLength>120</lineLength>
                 </configuration>
               </execution>
             </executions>
