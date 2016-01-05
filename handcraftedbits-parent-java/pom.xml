@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
   </parent>
 
   <scm>
@@ -46,7 +46,7 @@
     <coverage.skip>false</coverage.skip>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
-    <version.java>1.7</version.java>
+    <version.java>1.8</version.java>
 
     <version.dep.codequality>1.0.1</version.dep.codequality>
     <version.dep.testng>6.9.9</version.dep.testng>
