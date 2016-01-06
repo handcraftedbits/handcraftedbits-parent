@@ -48,7 +48,7 @@
     <javadoc.skip>false</javadoc.skip>
     <version.java>1.8</version.java>
 
-    <version.dep.codequality>1.0.1</version.dep.codequality>
+    <version.dep.codequality>1.0.3</version.dep.codequality>
     <version.dep.testng>6.9.9</version.dep.testng>
 
     <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
