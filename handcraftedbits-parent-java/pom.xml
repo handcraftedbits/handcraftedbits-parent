@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.4-SNAPSHOT</version>
   </parent>
 
   <scm>
@@ -50,7 +50,8 @@
 
     <version.dep.codequality>1.0.4</version.dep.codequality>
     <version.dep.findbugs>3.0.1</version.dep.findbugs>
-    <version.dep.testng>6.9.9</version.dep.testng>
+    <version.dep.slf4j>1.7.13</version.dep.slf4j>
+    <version.dep.testng>6.9.10</version.dep.testng>
 
     <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
     <version.plugin.compiler>3.3</version.plugin.compiler>
@@ -71,7 +72,16 @@
           <exists>${basedir}/src/main/java</exists>
         </file>
       </activation>
-
+      
+      <dependencies>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>${version.dep.slf4j}</version>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+      
       <build>
         <pluginManagement>
           <plugins>
@@ -128,6 +138,7 @@
             </executions>
             <configuration>
               <configLocation>checkstyle_handcraftedbits.xml</configLocation>
+              <includeTestSourceDirectory>true</includeTestSourceDirectory>
               <logViolationsToConsole>true</logViolationsToConsole>
             </configuration>
           </plugin>
@@ -198,6 +209,12 @@
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>findbugs</artifactId>
           <version>${version.dep.findbugs}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>${version.dep.slf4j}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
