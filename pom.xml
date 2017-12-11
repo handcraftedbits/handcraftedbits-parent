@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2016 HandcraftedBits
+  Copyright (C) 2015-2017 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -64,8 +64,8 @@
     <version.dep.handcraftedbits-license>1.0.1</version.dep.handcraftedbits-license>
     
     <version.plugin.gpg>1.6</version.plugin.gpg>
-    <version.plugin.license>2.11</version.plugin.license>
-    <version.plugin.nexus-staging>1.6.5</version.plugin.nexus-staging>
+    <version.plugin.license>3.0</version.plugin.license>
+    <version.plugin.nexus-staging>1.6.8</version.plugin.nexus-staging>
   </properties>
 
   <modules>
