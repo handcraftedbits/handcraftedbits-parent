@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2016 HandcraftedBits
+  Copyright (C) 2015-2017 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -50,16 +50,16 @@
 
     <version.dep.codequality>1.0.5</version.dep.codequality>
     <version.dep.findbugs>3.0.1</version.dep.findbugs>
-    <version.dep.slf4j>1.7.13</version.dep.slf4j>
-    <version.dep.testng>6.9.10</version.dep.testng>
+    <version.dep.slf4j>1.7.25</version.dep.slf4j>
+    <version.dep.testng>6.13.1</version.dep.testng>
 
     <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
-    <version.plugin.compiler>3.3</version.plugin.compiler>
-    <version.plugin.findbugs>3.0.3</version.plugin.findbugs>
-    <version.plugin.jacoco>0.7.5.201505241946</version.plugin.jacoco>
-    <version.plugin.javadoc>2.10.3</version.plugin.javadoc>
-    <version.plugin.source>2.4</version.plugin.source>
-    <version.plugin.surefire>2.19</version.plugin.surefire>
+    <version.plugin.compiler>3.7.0</version.plugin.compiler>
+    <version.plugin.findbugs>3.0.5</version.plugin.findbugs>
+    <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
+    <version.plugin.javadoc>3.0.0</version.plugin.javadoc>
+    <version.plugin.source>3.0.1</version.plugin.source>
+    <version.plugin.surefire>2.20.1</version.plugin.surefire>
   </properties>
 
   <profiles>
