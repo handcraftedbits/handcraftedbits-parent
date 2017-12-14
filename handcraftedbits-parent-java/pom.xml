@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
   </parent>
 
   <scm>
@@ -140,6 +140,9 @@
               <configLocation>checkstyle_handcraftedbits.xml</configLocation>
               <includeTestSourceDirectory>true</includeTestSourceDirectory>
               <logViolationsToConsole>true</logViolationsToConsole>
+              <sourceDirectories>
+                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+              </sourceDirectories>
             </configuration>
           </plugin>
         </plugins>
