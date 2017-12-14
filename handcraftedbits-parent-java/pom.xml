@@ -140,6 +140,9 @@
               <configLocation>checkstyle_handcraftedbits.xml</configLocation>
               <includeTestSourceDirectory>true</includeTestSourceDirectory>
               <logViolationsToConsole>true</logViolationsToConsole>
+              <sourceDirectories>
+                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+              </sourceDirectories>
             </configuration>
           </plugin>
         </plugins>
