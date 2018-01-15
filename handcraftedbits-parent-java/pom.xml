@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.7</version>
   </parent>
 
   <scm>
@@ -48,15 +48,15 @@
     <javadoc.skip>false</javadoc.skip>
     <version.java>1.8</version.java>
 
-    <version.dep.codequality>1.0.5</version.dep.codequality>
+    <version.dep.codequality>1.0.6</version.dep.codequality>
     <version.dep.findbugs>3.0.1</version.dep.findbugs>
     <version.dep.slf4j>1.7.25</version.dep.slf4j>
     <version.dep.testng>6.13.1</version.dep.testng>
 
-    <version.plugin.checkstyle>2.17</version.plugin.checkstyle>
+    <version.plugin.checkstyle>3.0.0</version.plugin.checkstyle>
     <version.plugin.compiler>3.7.0</version.plugin.compiler>
     <version.plugin.findbugs>3.0.5</version.plugin.findbugs>
-    <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
+    <version.plugin.jacoco>0.8.0</version.plugin.jacoco>
     <version.plugin.javadoc>3.0.0</version.plugin.javadoc>
     <version.plugin.source>3.0.1</version.plugin.source>
     <version.plugin.surefire>2.20.1</version.plugin.surefire>
