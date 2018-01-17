@@ -1,4 +1,4 @@
-# HandcraftedBits Parent POM
+# HandcraftedBits Parent POM (Java)
 
 A parent POM used by HandcraftedBits Java projects.
 

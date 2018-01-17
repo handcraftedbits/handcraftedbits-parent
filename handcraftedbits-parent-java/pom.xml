@@ -155,12 +155,6 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-          <version>${version.dep.slf4j}</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.testng</groupId>
           <artifactId>testng</artifactId>
           <version>${version.dep.testng}</version>
@@ -256,7 +250,11 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
           <version>${version.dep.slf4j}</version>
-          <scope>compile</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>${version.dep.slf4j}</version>
         </dependency>
       </dependencies>
       
@@ -390,12 +388,6 @@
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>findbugs</artifactId>
           <version>${version.dep.findbugs}</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-          <version>${version.dep.slf4j}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
