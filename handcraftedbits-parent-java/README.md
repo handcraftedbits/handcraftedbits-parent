@@ -6,8 +6,8 @@ A parent POM used by HandcraftedBits Java projects.
 
 ## code-coverage
 
-* **Active by default**: no
-* **Activated by**: flag
+* **Active by default**: yes
+* **Deactivated by**: flag
 * **Purpose**: Combines unit and integration test coverage results and creates a combined code coverage report.  Also
   fails the build if the minimum code coverage amount is not met.
 
@@ -39,7 +39,7 @@ A parent POM used by HandcraftedBits Java projects.
 
 ## coverage.skip
 
-* **Purpose**: Controls whether or not code coverage metrics are collected.
+* **Purpose**: Controls whether or not code minimum code coverage is enforced.
 * **Default value**: `false`
 
 ## javadoc.excludedPackages

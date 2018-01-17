@@ -31,16 +31,6 @@
     <version>1.2.9-SNAPSHOT</version>
   </parent>
 
-  <scm>
-    <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-    <connection>scm:git:git://github.com/handcraftedbits/handcraftedbits-parent.git</connection>
-    <developerConnection>scm:git:git@github.com:handcraftedbits/handcraftedbits-parent.git</developerConnection>
-  </scm>
-  <issueManagement>
-    <url>https://github.com/handcraftedbits/handcraftedbits-parent/issues</url>
-    <system>GitHub Issues</system>
-  </issueManagement>
-
   <properties>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.minimum>0.00</coverage.minimum>
@@ -66,11 +56,13 @@
   </properties>
 
   <profiles>
-    <!-- Code coverage support -->
+    <!-- Code coverage reporting and enforcement -->
     <profile>
       <id>code-coverage</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>!coverage.skip</name>
+        </property>
       </activation>
       
       <build>
@@ -87,7 +79,7 @@
                   <goal>merge</goal>
                 </goals>
                 <configuration>
-                  <destFile>${project.build.directory}/coverage/jacoco-combined.exec</destFile>
+                  <destFile>${project.build.directory}/coverage/jacoco-final.exec</destFile>
                   <fileSets>
                     <fileSet>
                       <directory>${project.build.directory}/coverage</directory>
@@ -104,9 +96,8 @@
                   <goal>report</goal>
                 </goals>
                 <configuration>
-                  <skip>${coverage.skip}</skip>
-                  <dataFile>${project.build.directory}/coverage/jacoco-combined.exec</dataFile>
-                  <outputDirectory>${project.build.directory}/coverage/combined</outputDirectory>
+                  <dataFile>${project.build.directory}/coverage/jacoco-final.exec</dataFile>
+                  <outputDirectory>${project.build.directory}/coverage/report</outputDirectory>
                 </configuration>
               </execution>
               <execution>
@@ -115,14 +106,15 @@
                   <goal>check</goal>
                 </goals>
                 <configuration>
-                  <skip>${coverage.skip}</skip>
-                  <dataFile>${project.build.directory}/coverage/jacoco-combined.exec</dataFile>
+                  <dataFile>${project.build.directory}/coverage/jacoco-final.exec</dataFile>
                   <rules>
                     <rule>
                       <element>CLASS</element>
                       <excludes>
                         <exclude>*IT</exclude>
+                        <exclude>*IT*</exclude>
                         <exclude>*Test</exclude>
+                        <exclude>*Test*</exclude>
                       </excludes>
                       <limits>
                         <limit>
@@ -150,6 +142,10 @@
           <exists>${basedir}/src/it/java</exists>
         </file>
       </activation>
+      
+      <properties>
+        <tests.integration.present>true</tests.integration.present>
+      </properties>
       
       <dependencies>
         <dependency>
@@ -209,6 +205,19 @@
                   </sources>
                 </configuration>
               </execution>
+              <execution>
+                <id>add-integration-test-resources</id>
+                <goals>
+                  <goal>add-test-resource</goal>
+                </goals>
+                <configuration>
+                  <resources>
+                    <resource>
+                      <directory>src/it/resources</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
           <plugin>
@@ -222,21 +231,8 @@
                   <goal>prepare-agent-integration</goal>
                 </goals>
                 <configuration>
-                  <skip>${coverage.skip}</skip>
                   <destFile>${project.build.directory}/coverage/jacoco-integration.exec</destFile>
                   <propertyName>coverage.failsafe.args</propertyName>
-                </configuration>
-              </execution>
-              <execution>
-                <id>jacoco-integration-test-report</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-                <configuration>
-                  <skip>${coverage.skip}</skip>
-                  <dataFile>${project.build.directory}/coverage/jacoco-integration.exec</dataFile>
-                  <outputDirectory>${project.build.directory}/coverage/integration</outputDirectory>
                 </configuration>
               </execution>
             </executions>
@@ -433,20 +429,8 @@
                   <goal>prepare-agent</goal>
                 </goals>
                 <configuration>
-                  <skip>${coverage.skip}</skip>
                   <destFile>${project.build.directory}/coverage/jacoco-unit.exec</destFile>
                   <propertyName>coverage.surefire.args</propertyName>
-                </configuration>
-              </execution>
-              <execution>
-                <id>jacoco-unit-test-report</id>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-                <configuration>
-                  <skip>${coverage.skip}</skip>
-                  <dataFile>${project.build.directory}/coverage/jacoco-unit.exec</dataFile>
-                  <outputDirectory>${project.build.directory}/coverage/unit</outputDirectory>
                 </configuration>
               </execution>
             </executions>
