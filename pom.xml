@@ -58,6 +58,7 @@
   </issueManagement>
 
   <properties>
+    <license.type>ASL2</license.type>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
    
@@ -161,13 +162,15 @@
                 </goals>
                 <configuration>
                   <aggregate>true</aggregate>
-                  <header>license/ASL2</header>
+                  <header>license/${license.type}</header>
                   <headerDefinitions>
                     <headerDefinition>license/style/xmlstyle.xml</headerDefinition>
                   </headerDefinitions>
                   <includes combine.children="append">
                     <include>**/pom.xml</include>
                     <include>**/*.java</include>
+                    <include>**/src/it/resources/**/*.properties</include>
+                    <include>**/src/it/resources/**/*.xml</include>
                     <include>**/src/main/resources/**/*.properties</include>
                     <include>**/src/main/resources/**/*.xml</include>
                     <include>**/src/test/resources/**/*.properties</include>

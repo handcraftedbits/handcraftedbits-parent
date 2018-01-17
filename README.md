@@ -36,7 +36,7 @@ Add additional source roots and/or file types:
 
 # Properties
 
-## name.license
+## license.type
 
 * **Purpose**: Controls the source code license used by `license-maven-plugin`.
-* **Default value**: `apache_v2`
+* **Default value**: `ASL2`
