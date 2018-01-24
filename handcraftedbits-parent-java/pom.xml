@@ -41,12 +41,14 @@
 
     <version.dep.codequality>1.0.7</version.dep.codequality>
     <version.dep.findbugs>3.0.1</version.dep.findbugs>
+    <version.dep.mockito>2.13.0</version.dep.mockito>
     <version.dep.slf4j>1.7.25</version.dep.slf4j>
     <version.dep.testng>6.13.1</version.dep.testng>
     
     <version.plugin.build-helper>3.0.0</version.plugin.build-helper>
     <version.plugin.checkstyle>3.0.0</version.plugin.checkstyle>
     <version.plugin.compiler>3.7.0</version.plugin.compiler>
+    <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
     <version.plugin.failsafe>2.20.1</version.plugin.failsafe>
     <version.plugin.findbugs>3.0.5</version.plugin.findbugs>
     <version.plugin.jacoco>0.8.0</version.plugin.jacoco>
@@ -133,6 +135,41 @@
       </build>
     </profile>
     
+    <!-- coveralls.io support -->
+    <profile>
+      <id>coveralls</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        
+        <property>
+          <name>env.COVERALLS_REPO_TOKEN</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eluder.coveralls</groupId>
+            <artifactId>coveralls-maven-plugin</artifactId>
+            <version>${version.plugin.coveralls}</version>
+            <executions>
+              <execution>
+                <id>update-coveralls</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+                <configuration>
+                  <jacocoReports>${project.build.directory}/coverage/report/jacoco.xml</jacocoReports>
+                  <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+                  <skip>${skipTests}</skip>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
     <!-- Integration test support -->
     <profile>
       <id>integration-test</id>
@@ -152,6 +189,12 @@
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>findbugs</artifactId>
           <version>${version.dep.findbugs}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>${version.dep.mockito}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -388,6 +431,12 @@
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>findbugs</artifactId>
           <version>${version.dep.findbugs}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>${version.dep.mockito}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
