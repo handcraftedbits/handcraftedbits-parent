@@ -171,6 +171,7 @@
                     <include>**/*.java</include>
                     <include>**/src/it/resources/**/*.properties</include>
                     <include>**/src/it/resources/**/*.xml</include>
+                    <include>**/src/main/codequality/**/*.xml</include>
                     <include>**/src/main/resources/**/*.properties</include>
                     <include>**/src/main/resources/**/*.xml</include>
                     <include>**/src/test/resources/**/*.properties</include>
