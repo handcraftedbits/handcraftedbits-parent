@@ -28,15 +28,18 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.2.10</version>
+    <version>1.2.11</version>
   </parent>
 
   <properties>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
+    <coverage.branch.minimum>0.00</coverage.branch.minimum>
     <coverage.minimum>0.00</coverage.minimum>
     <coverage.skip>false</coverage.skip>
+    <failsafe.args.extra></failsafe.args.extra>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
+    <surefire.args.extra></surefire.args.extra>
     <version.java>1.8</version.java>
 
     <version.dep.codequality>1.0.7</version.dep.codequality>
@@ -120,6 +123,11 @@
                       </excludes>
                       <limits>
                         <limit>
+                          <counter>BRANCH</counter>
+                          <value>COVEREDRATIO</value>
+                          <minimum>${coverage.branch.minimum}</minimum>
+                        </limit>
+                        <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
                           <minimum>${coverage.minimum}</minimum>
@@ -180,10 +188,6 @@
         </file>
       </activation>
       
-      <properties>
-        <tests.integration.present>true</tests.integration.present>
-      </properties>
-      
       <dependencies>
         <dependency>
           <groupId>com.google.code.findbugs</groupId>
@@ -212,7 +216,7 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
             <configuration>
-              <argLine>${coverage.failsafe.args}</argLine>
+              <argLine>${coverage.failsafe.args} ${failsafe.args.extra}</argLine>
               <parallel>classes</parallel>
               <threadCount>4</threadCount>
             </configuration>
@@ -454,7 +458,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
             <configuration>
-              <argLine>${coverage.surefire.args}</argLine>
+              <argLine>${coverage.surefire.args} ${surefire.args.extra}</argLine>
               <parallel>classes</parallel>
               <threadCount>4</threadCount>
             </configuration>

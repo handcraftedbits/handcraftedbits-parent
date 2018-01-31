@@ -9,7 +9,7 @@ A parent POM used by HandcraftedBits Java projects.
 * **Active by default**: yes
 * **Deactivated by**: flag
 * **Purpose**: Combines unit and integration test coverage results and creates a combined code coverage report.  Also
-  fails the build if the minimum code coverage amount is not met.
+  fails the build if the minimum code coverage amount (lines and/or branches) is not met.
 
 ## integration-test
 
@@ -31,6 +31,12 @@ A parent POM used by HandcraftedBits Java projects.
 
 # Properties
 
+## coverage.branch.minimum
+
+* **Purpose**: Sets the minimum percentage of branches that must be covered by unit and/or integration tests.
+* **Default value**: `0.00`
+* **Acceptable values**: `0.00` - `1.00`
+
 ## coverage.minimum
 
 * **Purpose**: Sets the minimum percentage of instructions that must be covered by unit and/or integration tests.
@@ -42,6 +48,11 @@ A parent POM used by HandcraftedBits Java projects.
 * **Purpose**: Controls whether or not code minimum code coverage is enforced.
 * **Default value**: `false`
 
+## failsafe.args.extra
+
+* **Purpose**: Allows for extra arguments to be passed to `maven-failsafe-plugin`.
+* **Default value**:
+
 ## javadoc.excludedPackages
 
 * **Purpose**: Specifies which packages are excluded from Javadoc generation.
@@ -51,6 +62,11 @@ A parent POM used by HandcraftedBits Java projects.
 
 * **Purpose**: Controls whether or not Javadocs are generated.
 * **Default value**: `false`
+
+## surefire.args.extra
+
+* **Purpose**: Allows for extra arguments to be passed to `maven-surefire-plugin`.
+* **Default value**:
 
 ## version.java
 
