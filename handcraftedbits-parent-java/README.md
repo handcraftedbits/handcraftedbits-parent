@@ -11,6 +11,12 @@ A parent POM used by HandcraftedBits Java projects.
 * **Purpose**: Combines unit and integration test coverage results and creates a combined code coverage report.  Also
   fails the build if the minimum code coverage amount (lines and/or branches) is not met.
 
+## include-logging
+
+* **Active bye default**: no
+* **Activated by**: existing of `${basedir}/src/test/resources/simplelogger.properties`
+* **Purpose**: Adds slf4j dependencies.
+
 ## integration-test
 
 * **Active by default**: no
