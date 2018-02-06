@@ -306,20 +306,6 @@
       </dependencies>
       
       <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>${version.plugin.compiler}</version>
-              <configuration>
-                <source>${version.java}</source>
-                <target>${version.java}</target>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-
         <plugins>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
@@ -484,4 +470,22 @@
       </build>
     </profile>
   </profiles>
+  
+  <!-- Always set the correct Java version, even for projects that don't contain any sources. -->
+  
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${version.plugin.compiler}</version>
+          <configuration>
+            <source>${version.java}</source>
+            <target>${version.java}</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
