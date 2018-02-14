@@ -91,6 +91,7 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
         <version>${version.dep.slf4j}</version>
+        <scope>runtime</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -211,28 +212,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    
-    <!-- Used to include logging libraries (should be disabled for e.g., API projects) -->
-    <profile>
-      <id>include-logging</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <file>
-          <exists>src/test/resources/simplelogger.properties</exists>
-        </file>
-      </activation>
-      
-      <dependencies>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-        </dependency>
-      </dependencies>
     </profile>
     
     <!-- Integration test support -->
