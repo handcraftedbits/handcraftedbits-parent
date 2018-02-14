@@ -43,7 +43,6 @@
     <version.java>1.8</version.java>
 
     <version.dep.codequality>1.0.7</version.dep.codequality>
-    <version.dep.findbugs>3.0.1</version.dep.findbugs>
     <version.dep.junit>5.0.3</version.dep.junit>
     <version.dep.junit.provider>1.0.3</version.dep.junit.provider>
     <version.dep.mockito>2.13.0</version.dep.mockito>
@@ -54,20 +53,15 @@
     <version.plugin.compiler>3.7.0</version.plugin.compiler>
     <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
     <version.plugin.failsafe>2.19.1</version.plugin.failsafe>
-    <version.plugin.findbugs>3.0.5</version.plugin.findbugs>
     <version.plugin.jacoco>0.8.0</version.plugin.jacoco>
     <version.plugin.javadoc>3.0.0</version.plugin.javadoc>
     <version.plugin.source>3.0.1</version.plugin.source>
+    <version.plugin.spotbugs>3.1.1</version.plugin.spotbugs>
     <version.plugin.surefire>2.19.1</version.plugin.surefire>
   </properties>
   
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.google.code.findbugs</groupId>
-        <artifactId>findbugs</artifactId>
-        <version>${version.dep.findbugs}</version>
-      </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
@@ -253,11 +247,6 @@
       
       <dependencies>
         <dependency>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>findbugs</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
           <scope>test</scope>
@@ -372,12 +361,12 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>${version.plugin.findbugs}</version>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${version.plugin.spotbugs}</version>
             <executions>
               <execution>
-                <id>check-findbugs</id>
+                <id>check-spotbugs</id>
                 <phase>verify</phase>
                 <goals>
                   <goal>check</goal>
@@ -481,11 +470,6 @@
       </activation>
       
       <dependencies>
-        <dependency>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>findbugs</artifactId>
-          <scope>test</scope>
-        </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
