@@ -28,14 +28,13 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
   </parent>
 
   <properties>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.branch.minimum>0.00</coverage.branch.minimum>
     <coverage.minimum>0.00</coverage.minimum>
-    <coverage.skip>false</coverage.skip>
     <failsafe.args.extra></failsafe.args.extra>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
@@ -101,9 +100,10 @@
     <profile>
       <id>code-coverage</id>
       <activation>
-        <property>
-          <name>!coverage.skip</name>
-        </property>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/java</exists>
+        </file>
       </activation>
       
       <build>
@@ -188,6 +188,9 @@
         <property>
           <name>env.COVERALLS_REPO_TOKEN</name>
         </property>
+        <file>
+          <exists>${basedir}/src/main/java</exists>
+        </file>
       </activation>
       <build>
         <plugins>
@@ -205,7 +208,6 @@
                 <configuration>
                   <jacocoReports>${project.build.directory}/coverage/report/jacoco.xml</jacocoReports>
                   <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-                  <skip>${skipTests}</skip>
                 </configuration>
               </execution>
             </executions>
