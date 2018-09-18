@@ -169,6 +169,8 @@
                   <includes combine.children="append">
                     <include>**/pom.xml</include>
                     <include>**/*.java</include>
+                    <include>**/src/it/**/invoker.properties</include>
+                    <include>**/src/it/**/verify.groovy</include>
                     <include>**/src/it/resources/**/*.properties</include>
                     <include>**/src/it/resources/**/*.xml</include>
                     <include>**/src/main/codequality/**/*.xml</include>
