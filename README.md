@@ -40,3 +40,8 @@ Add additional source roots and/or file types:
 
 * **Purpose**: Controls the source code license used by `license-maven-plugin`.
 * **Default value**: `ASL2`
+
+## version.maven.minimum
+
+* **Purpose**: Used to specify the minimum required Maven version.
+* **Default value**: `3.5.0`
