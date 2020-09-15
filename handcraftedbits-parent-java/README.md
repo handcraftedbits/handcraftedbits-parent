@@ -71,4 +71,4 @@ A parent POM used by HandcraftedBits Java projects.
 ## version.java
 
 * **Purpose**: Specifies the Java compiler level to use.
-* **Default value**: `1.8`
+* **Default value**: `11`
