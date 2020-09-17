@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
   </parent>
 
   <properties>
@@ -43,6 +43,7 @@
 
     <version.dep.codequality>1.1.0</version.dep.codequality>
     <version.dep.junit>5.7.0</version.dep.junit>
+    <version.dep.lombok>edge-SNAPSHOT</version.dep.lombok>
     <version.dep.mockito>3.5.10</version.dep.mockito>
     <version.dep.slf4j>1.7.30</version.dep.slf4j>
     <version.dep.spotbugs>4.1.2</version.dep.spotbugs>
@@ -52,7 +53,7 @@
     <version.plugin.compiler>3.8.1</version.plugin.compiler>
     <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
     <version.plugin.failsafe>2.22.2</version.plugin.failsafe>
-    <version.plugin.jacoco>0.8.5</version.plugin.jacoco>
+    <version.plugin.jacoco>0.8.6</version.plugin.jacoco>
     <version.plugin.javadoc>3.2.0</version.plugin.javadoc>
     <version.plugin.source>3.2.1</version.plugin.source>
     <version.plugin.spotbugs>4.0.4</version.plugin.spotbugs>
@@ -81,6 +82,12 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${version.dep.mockito}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${version.dep.lombok}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -529,6 +536,13 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${version.plugin.compiler}</version>
           <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${version.dep.lombok}</version>
+              </path>
+            </annotationProcessorPaths>
             <source>${version.java}</source>
             <target>${version.java}</target>
           </configuration>
@@ -536,4 +550,12 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <!-- Only needed until https://github.com/rzwitserloot/lombok/issues/2125 is fixed. -->
+  <repositories>
+    <repository>
+      <id>projectlombok.org</id>
+      <url>https://projectlombok.org/edge-releases</url>
+    </repository>
+  </repositories>
 </project>
