@@ -72,3 +72,26 @@ A parent POM used by HandcraftedBits Java projects.
 
 * **Purpose**: Specifies the Java compiler level to use.
 * **Default value**: `11`
+
+# Miscellaneous
+
+* Add custom Javadoc links to
+  [maven-javadoc-plugin](https://maven.apache.org/plugins/maven-javadoc-plugin/) with:
+
+  ```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>...</link>
+            <link>...</link>
+          </links>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  ```
+
