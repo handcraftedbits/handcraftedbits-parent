@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -45,7 +45,7 @@
     <version.dep.junit>5.7.0</version.dep.junit>
     <version.dep.lombok>edge-SNAPSHOT</version.dep.lombok>
     <version.dep.mockito>3.5.10</version.dep.mockito>
-    <version.dep.slf4j>1.7.30</version.dep.slf4j>
+    <version.dep.slf4j>2.0.0-alpha1</version.dep.slf4j>
     <version.dep.spotbugs>4.1.2</version.dep.spotbugs>
     
     <version.plugin.build-helper>3.2.0</version.plugin.build-helper>
@@ -341,6 +341,10 @@
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
         </dependency>
+        <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+        </dependency>
       </dependencies>
       
       <build>
@@ -440,9 +444,7 @@
                   <skip>${javadoc.skip}</skip>
                   <additionalparam>-Xdoclint:none</additionalparam>
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
-                  <links>
-                    <link>https://javaee.github.io/javaee-spec/javadocs/</link>
-                  </links>
+                  <links combine.children="append" />
                 </configuration>
               </execution>
             </executions>
