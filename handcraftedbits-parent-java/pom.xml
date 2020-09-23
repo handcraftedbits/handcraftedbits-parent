@@ -43,6 +43,7 @@
 
     <version.dep.codequality>1.1.0</version.dep.codequality>
     <version.dep.junit>5.7.0</version.dep.junit>
+    <version.dep.logback>1.3.0-alpha5</version.dep.logback>
     <version.dep.lombok>edge-SNAPSHOT</version.dep.lombok>
     <version.dep.mockito>3.5.10</version.dep.mockito>
     <version.dep.slf4j>2.0.0-alpha1</version.dep.slf4j>
@@ -62,6 +63,12 @@
   
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${version.dep.logback}</version>
+        <scope>runtime</scope>
+      </dependency>
       <dependency>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-annotations</artifactId>
@@ -93,12 +100,6 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${version.dep.slf4j}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${version.dep.slf4j}</version>
-        <scope>runtime</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
