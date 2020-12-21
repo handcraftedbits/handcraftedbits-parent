@@ -36,6 +36,11 @@ Add additional source roots and/or file types:
 
 # Properties
 
+## checkstyle.suppressions.location
+
+* **Purpose**: Used to specify the location of the [Checkstyle](https://checkstyle.sourceforge.io/) suppressions file.
+* **Default value**: `checkstyle-handcraftedbits-suppressions.xml`
+
 ## license.type
 
 * **Purpose**: Controls the source code license used by `license-maven-plugin`.
