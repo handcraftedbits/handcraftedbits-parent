@@ -28,36 +28,39 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.4.2</version>
+    <version>1.5.0</version>
   </parent>
 
   <properties>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.branch.minimum>0.00</coverage.branch.minimum>
     <coverage.minimum>0.00</coverage.minimum>
-    <failsafe.args.extra></failsafe.args.extra>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
-    <surefire.args.extra></surefire.args.extra>
+    <maven.compiler.source>${version.java}</maven.compiler.source>
+    <maven.compiler.target>${version.java}</maven.compiler.target>
     <version.java>11</version.java>
 
-    <version.dep.codequality>1.1.0</version.dep.codequality>
+    <version.dep.codequality>1.1.1</version.dep.codequality>
     <version.dep.junit>5.7.0</version.dep.junit>
-    <version.dep.logback>1.3.0-alpha5</version.dep.logback>
-    <version.dep.lombok>edge-SNAPSHOT</version.dep.lombok>
-    <version.dep.mockito>3.5.10</version.dep.mockito>
+    <version.dep.logback>1.3.0-alpha4</version.dep.logback>
+    <version.dep.lombok>1.18.16</version.dep.lombok>
+    <version.dep.mockito>3.6.28</version.dep.mockito>
     <version.dep.slf4j>2.0.0-alpha1</version.dep.slf4j>
-    <version.dep.spotbugs>4.1.2</version.dep.spotbugs>
-    
+    <version.dep.spotbugs>4.2.0</version.dep.spotbugs>
+    <version.dep.jacoco>0.8.6</version.dep.jacoco>
+
     <version.plugin.build-helper>3.2.0</version.plugin.build-helper>
     <version.plugin.checkstyle>3.1.1</version.plugin.checkstyle>
     <version.plugin.compiler>3.8.1</version.plugin.compiler>
     <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
     <version.plugin.failsafe>2.22.2</version.plugin.failsafe>
-    <version.plugin.jacoco>0.8.6</version.plugin.jacoco>
+    <version.plugin.formatter>2.13.0</version.plugin.formatter>
+    <version.plugin.impsort>1.4.1</version.plugin.impsort>
+    <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
     <version.plugin.javadoc>3.2.0</version.plugin.javadoc>
     <version.plugin.source>3.2.1</version.plugin.source>
-    <version.plugin.spotbugs>4.0.4</version.plugin.spotbugs>
+    <version.plugin.spotbugs>4.1.4</version.plugin.spotbugs>
     <version.plugin.surefire>2.22.2</version.plugin.surefire>
   </properties>
   
@@ -65,7 +68,7 @@
     <dependencies>
       <dependency>
         <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
+        <artifactId>logback-classic</artifactId> 
         <version>${version.dep.logback}</version>
         <scope>runtime</scope>
       </dependency>
@@ -74,32 +77,45 @@
         <artifactId>spotbugs-annotations</artifactId>
         <version>${version.dep.spotbugs}</version>
         <scope>provided</scope>
+        <optional>true</optional>
+      </dependency>
+      <dependency>
+        <groupId>org.jacoco</groupId>
+        <artifactId>org.jacoco.agent</artifactId>
+        <version>${version.dep.jacoco}</version>
+        <classifier>runtime</classifier>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
         <version>${version.dep.junit}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
         <version>${version.dep.junit}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${version.dep.mockito}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${version.dep.lombok}</version>
         <scope>provided</scope>
+        <optional>true</optional>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${version.dep.slf4j}</version>
+        <scope>compile</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -240,17 +256,14 @@
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
-          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
-          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
-          <scope>test</scope>
         </dependency>
       </dependencies>
       
@@ -261,8 +274,12 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
             <configuration>
-              <argLine>${coverage.failsafe.args} ${failsafe.args.extra}</argLine>
               <parallel>classes</parallel>
+              <systemPropertyVariables>
+                <jacoco-agent.destfile>
+                  ${project.build.directory}/coverage/jacoco-integration.exec
+                </jacoco-agent.destfile>
+              </systemPropertyVariables>
               <threadCount>4</threadCount>
             </configuration>
             <executions>
@@ -312,14 +329,16 @@
             <version>${version.plugin.jacoco}</version>
             <executions>
               <execution>
-                <id>jacoco-integration-test-prepare-agent</id>
+                <id>jacoco-integration-test-instrument-classes</id>
                 <goals>
-                  <goal>prepare-agent-integration</goal>
+                  <goal>instrument</goal>
                 </goals>
-                <configuration>
-                  <destFile>${project.build.directory}/coverage/jacoco-integration.exec</destFile>
-                  <propertyName>coverage.failsafe.args</propertyName>
-                </configuration>
+              </execution>
+              <execution>
+                <id>jacoco-integration-test-restore-classes</id>
+                <goals>
+                  <goal>restore-instrumented-classes</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>
@@ -364,6 +383,67 @@
                 <configuration>
                   <maxRank>20</maxRank>
                   <threshold>Low</threshold>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>net.revelc.code</groupId>
+            <artifactId>impsort-maven-plugin</artifactId>
+            <version>${version.plugin.impsort}</version>
+            <executions>
+              <execution>
+                <id>organize-imports</id>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+                <configuration>
+                  <breadthFirstComparator>true</breadthFirstComparator>
+                  <directories>
+                    <directory>${basedir}/src/it/java</directory>
+                    <directory>${basedir}/src/main/java</directory>
+                    <directory>${basedir}/src/test/java</directory>
+                  </directories>
+                  <groups>java.,javax.</groups>
+                  <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
+                  <lineEnding>LF</lineEnding>
+                  <removeUnused>true</removeUnused>
+                  <staticAfter>false</staticAfter>
+                  <staticGroups>*</staticGroups>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>net.revelc.code.formatter</groupId>
+            <artifactId>formatter-maven-plugin</artifactId>
+            <version>${version.plugin.formatter}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.handcraftedbits</groupId>
+                <artifactId>handcraftedbits-codequality</artifactId>
+                <version>${version.dep.codequality}</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>format-java</id>
+                <goals>
+                  <goal>format</goal>
+                </goals>
+                <configuration>
+                  <configFile>formatter-handcraftedbits.xml</configFile>
+                  <directories>
+                    <directory>${basedir}/src/it/java</directory>
+                    <directory>${basedir}/src/main/java</directory>
+                    <directory>${basedir}/src/test/java</directory>
+                  </directories>
+                  <lineEnding>LF</lineEnding>
+                  <skipCssFormatting>true</skipCssFormatting>
+                  <skipHtmlFormatting>true</skipHtmlFormatting>
+                  <skipJsFormatting>true</skipJsFormatting>
+                  <skipJsonFormatting>true</skipJsonFormatting>
+                  <skipXmlFormatting>true</skipXmlFormatting>
                 </configuration>
               </execution>
             </executions>
@@ -479,19 +559,21 @@
       
       <dependencies>
         <dependency>
+          <groupId>org.jacoco</groupId>
+          <artifactId>org.jacoco.agent</artifactId>
+          <classifier>runtime</classifier>
+        </dependency>
+        <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
-          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
-          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
-          <scope>test</scope>
         </dependency>
       </dependencies>
       
@@ -502,8 +584,10 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
             <configuration>
-              <argLine>${coverage.surefire.args} ${surefire.args.extra}</argLine>
               <parallel>classes</parallel>
+              <systemPropertyVariables>
+                <jacoco-agent.destfile>${project.build.directory}/coverage/jacoco-unit.exec</jacoco-agent.destfile>
+              </systemPropertyVariables>
               <threadCount>4</threadCount>
             </configuration>
           </plugin>
@@ -513,14 +597,16 @@
             <version>${version.plugin.jacoco}</version>
             <executions>
               <execution>
-                <id>jacoco-unit-test-prepare-agent</id>
+                <id>jacoco-unit-test-instrument-classes</id>
                 <goals>
-                  <goal>prepare-agent</goal>
+                  <goal>instrument</goal>
                 </goals>
-                <configuration>
-                  <destFile>${project.build.directory}/coverage/jacoco-unit.exec</destFile>
-                  <propertyName>coverage.surefire.args</propertyName>
-                </configuration>
+              </execution>
+              <execution>
+                <id>jacoco-unit-test-restore-classes</id>
+                <goals>
+                  <goal>restore-instrumented-classes</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>
@@ -529,11 +615,43 @@
     </profile>
   </profiles>
   
-  <!-- Always set the correct Java version, even for projects that don't contain any sources. -->
-  
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>net.revelc.code.formatter</groupId>
+          <artifactId>formatter-maven-plugin</artifactId>
+          <version>${version.plugin.formatter}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.handcraftedbits</groupId>
+              <artifactId>handcraftedbits-codequality</artifactId>
+              <version>${version.dep.codequality}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>format-java</id>
+              <goals>
+                <goal>format</goal>
+              </goals>
+              <configuration>
+                <configFile>formatter-handcraftedbits.xml</configFile>
+                <directories>
+                  <directory>${basedir}/src/it/java</directory>
+                  <directory>${basedir}/src/main/java</directory>
+                  <directory>${basedir}/src/test/java</directory>
+                </directories>
+                <lineEnding>LF</lineEnding>
+                <skipCssFormatting>true</skipCssFormatting>
+                <skipHtmlFormatting>true</skipHtmlFormatting>
+                <skipJsFormatting>true</skipJsFormatting>
+                <skipJsonFormatting>true</skipJsonFormatting>
+                <skipXmlFormatting>true</skipXmlFormatting>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -546,19 +664,9 @@
                 <version>${version.dep.lombok}</version>
               </path>
             </annotationProcessorPaths>
-            <source>${version.java}</source>
-            <target>${version.java}</target>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
   </build>
-
-  <!-- Only needed until https://github.com/rzwitserloot/lombok/issues/2125 is fixed. -->
-  <repositories>
-    <repository>
-      <id>projectlombok.org</id>
-      <url>https://projectlombok.org/edge-releases</url>
-    </repository>
-  </repositories>
 </project>

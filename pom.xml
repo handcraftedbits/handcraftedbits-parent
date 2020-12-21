@@ -25,7 +25,7 @@
   <name>HandcraftedBits Parent POM</name>
   <description>A parent POM used by HandcraftedBits projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.4.2</version>
+  <version>1.5.0</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>
@@ -63,7 +63,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
    
     <version.dep.handcraftedbits-license>1.0.2</version.dep.handcraftedbits-license>
-    <version.maven.minimum>3.5.0</version.maven.minimum>
+    <version.maven.minimum>3.6.3</version.maven.minimum>
     
     <version.plugin.enforcer>3.0.0-M3</version.plugin.enforcer>
     <version.plugin.gpg>1.6</version.plugin.gpg>
