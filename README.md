@@ -49,4 +49,4 @@ Add additional source roots and/or file types:
 ## version.maven.minimum
 
 * **Purpose**: Used to specify the minimum required Maven version.
-* **Default value**: `3.5.0`
+* **Default value**: `3.6.3`
