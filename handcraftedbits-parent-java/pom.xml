@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -256,6 +256,24 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>net.revelc.code</groupId>
+            <artifactId>impsort-maven-plugin</artifactId>
+            <version>${version.plugin.impsort}</version>
+            <executions>
+              <execution>
+                <id>organize-imports-it</id>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+                <configuration>
+                  <directories>
+                    <directory>${basedir}/src/it/java</directory>
+                  </directories>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
@@ -379,23 +397,14 @@
             <version>${version.plugin.impsort}</version>
             <executions>
               <execution>
-                <id>organize-imports</id>
+                <id>organize-imports-java</id>
                 <goals>
                   <goal>sort</goal>
                 </goals>
                 <configuration>
-                  <breadthFirstComparator>true</breadthFirstComparator>
                   <directories>
-                    <directory>${basedir}/src/it/java</directory>
                     <directory>${basedir}/src/main/java</directory>
-                    <directory>${basedir}/src/test/java</directory>
                   </directories>
-                  <groups>java.,javax.</groups>
-                  <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
-                  <lineEnding>LF</lineEnding>
-                  <removeUnused>true</removeUnused>
-                  <staticAfter>false</staticAfter>
-                  <staticGroups>*</staticGroups>
                 </configuration>
               </execution>
             </executions>
@@ -566,6 +575,24 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>net.revelc.code</groupId>
+            <artifactId>impsort-maven-plugin</artifactId>
+            <version>${version.plugin.impsort}</version>
+            <executions>
+              <execution>
+                <id>organize-imports-test</id>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+                <configuration>
+                  <directories>
+                    <directory>${basedir}/src/test/java</directory>
+                  </directories>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
@@ -604,6 +631,20 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>net.revelc.code</groupId>
+          <artifactId>impsort-maven-plugin</artifactId>
+          <version>${version.plugin.impsort}</version>
+          <configuration>
+            <breadthFirstComparator>true</breadthFirstComparator>
+            <groups>java.,javax.</groups>
+            <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
+            <lineEnding>LF</lineEnding>
+            <removeUnused>true</removeUnused>
+            <staticAfter>false</staticAfter>
+            <staticGroups>*</staticGroups>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>net.revelc.code.formatter</groupId>
           <artifactId>formatter-maven-plugin</artifactId>
