@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2020 HandcraftedBits
+  Copyright (C) 2015-2021 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <name>HandcraftedBits Parent POM</name>
   <description>A parent POM used by HandcraftedBits projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>
@@ -205,6 +205,9 @@
                     <include>**/src/test/resources/**/*.xml</include>
                   </includes>
                   <lineLength>120</lineLength>
+                  <mapping>
+                    <java>SLASHSTAR_STYLE</java>
+                  </mapping>
                 </configuration>
               </execution>
             </executions>
