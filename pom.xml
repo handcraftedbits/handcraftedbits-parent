@@ -63,11 +63,11 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
    
     <version.dep.handcraftedbits-license>1.0.2</version.dep.handcraftedbits-license>
-    <version.maven.minimum>3.6.3</version.maven.minimum>
+    <version.maven.minimum>3.8.4</version.maven.minimum>
     
-    <version.plugin.enforcer>3.0.0-M3</version.plugin.enforcer>
-    <version.plugin.gpg>1.6</version.plugin.gpg>
-    <version.plugin.license>3.0</version.plugin.license>
+    <version.plugin.enforcer>3.0.0</version.plugin.enforcer>
+    <version.plugin.gpg>3.0.1</version.plugin.gpg>
+    <version.plugin.license>4.1</version.plugin.license>
     <version.plugin.nexus-staging>1.6.8</version.plugin.nexus-staging>
   </properties>
 

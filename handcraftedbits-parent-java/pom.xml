@@ -39,69 +39,40 @@
     <javadoc.skip>false</javadoc.skip>
     <maven.compiler.source>${version.java}</maven.compiler.source>
     <maven.compiler.target>${version.java}</maven.compiler.target>
-    <version.java>11</version.java>
+    <version.java>17</version.java>
 
+    <version.dep.checkstyle>9.2</version.dep.checkstyle>
     <version.dep.codequality>1.1.1</version.dep.codequality>
-    <version.dep.junit>5.7.0</version.dep.junit>
-    <version.dep.lombok>1.18.16</version.dep.lombok>
-    <version.dep.mockito>3.6.28</version.dep.mockito>
-    <version.dep.spotbugs>4.2.0</version.dep.spotbugs>
-    <version.dep.jacoco>0.8.6</version.dep.jacoco>
+    <version.dep.immutables>2.8.8</version.dep.immutables>
+    <!-- Lombok should stay in sync with Spring Boot version. -->
+    <version.dep.lombok>1.18.22</version.dep.lombok>
+    <version.dep.spotbugs>4.5.1</version.dep.spotbugs>
+    <version.dep.jacoco>0.8.7</version.dep.jacoco>
+    <version.dep.jsr305>1.2</version.dep.jsr305>
+    <version.dep.spring-boot>2.6.1</version.dep.spring-boot>
 
     <version.plugin.build-helper>3.2.0</version.plugin.build-helper>
-    <version.plugin.checkstyle>3.1.1</version.plugin.checkstyle>
+    <version.plugin.checkstyle>3.1.2</version.plugin.checkstyle>
     <version.plugin.compiler>3.8.1</version.plugin.compiler>
     <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
-    <version.plugin.failsafe>2.22.2</version.plugin.failsafe>
-    <version.plugin.formatter>2.13.0</version.plugin.formatter>
+    <version.plugin.failsafe>3.0.0-M5</version.plugin.failsafe>
+    <version.plugin.formatter>2.17.1</version.plugin.formatter>
     <version.plugin.impsort>1.4.1</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
-    <version.plugin.javadoc>3.2.0</version.plugin.javadoc>
+    <version.plugin.javadoc>3.3.1</version.plugin.javadoc>
     <version.plugin.source>3.2.1</version.plugin.source>
-    <version.plugin.spotbugs>4.1.4</version.plugin.spotbugs>
-    <version.plugin.surefire>2.22.2</version.plugin.surefire>
+    <version.plugin.spotbugs>4.5.0.0</version.plugin.spotbugs>
+    <version.plugin.surefire>3.0.0-M5</version.plugin.surefire>
   </properties>
   
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-annotations</artifactId>
-        <version>${version.dep.spotbugs}</version>
-        <scope>provided</scope>
-        <optional>true</optional>
-      </dependency>
-      <dependency>
-        <groupId>org.jacoco</groupId>
-        <artifactId>org.jacoco.agent</artifactId>
-        <version>${version.dep.jacoco}</version>
-        <classifier>runtime</classifier>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>${version.dep.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${version.dep.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${version.dep.mockito}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${version.dep.lombok}</version>
-        <scope>provided</scope>
-        <optional>true</optional>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${version.dep.spring-boot}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -240,16 +211,24 @@
       
       <dependencies>
         <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
+          <scope>test</scope>
         </dependency>
       </dependencies>
       
@@ -364,10 +343,36 @@
         <dependency>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
+          <version>${version.dep.spotbugs}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+          <exclusions>
+            <!-- Doesn't play well with JPMS. -->
+            <exclusion>
+              <groupId>com.google.code.findbugs</groupId>
+              <artifactId>jsr305</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>no.ssb.jpms</groupId>
+          <artifactId>jsr305-and-javax.annotation-api</artifactId>
+          <version>${version.dep.jsr305}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.immutables</groupId>
+          <artifactId>value-annotations</artifactId>
+          <version>${version.dep.immutables}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
+          <scope>provided</scope>
+          <optional>true</optional>
         </dependency>
       </dependencies>
       
@@ -453,6 +458,11 @@
                 <artifactId>handcraftedbits-codequality</artifactId>
                 <version>${version.dep.codequality}</version>
               </dependency>
+              <dependency>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>${version.dep.checkstyle}</version>
+              </dependency>
             </dependencies>
             <executions>
               <execution>
@@ -519,8 +529,12 @@
                 <configuration>
                   <skip>${javadoc.skip}</skip>
                   <additionalparam>-Xdoclint:none</additionalparam>
+                  <detectLinks />
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
-                  <links combine.children="append" />
+                  <links combine.children="append">
+                    <link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link>
+                    <link>https://projectlombok.org/api/</link>
+                  </links>
                 </configuration>
               </execution>
             </executions>
@@ -554,21 +568,31 @@
       
       <dependencies>
         <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.agent</artifactId>
+          <version>${version.dep.jacoco}</version>
           <classifier>runtime</classifier>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
+          <scope>test</scope>
         </dependency>
       </dependencies>
       
@@ -685,6 +709,11 @@
           <version>${version.plugin.compiler}</version>
           <configuration>
             <annotationProcessorPaths>
+              <path>
+                <groupId>org.immutables</groupId>
+                <artifactId>value-processor</artifactId>
+                <version>${version.dep.immutables}</version>
+              </path>
               <path>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
