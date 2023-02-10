@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2021 HandcraftedBits
+  Copyright (C) 2015-2023 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
   </parent>
 
   <properties>
@@ -37,71 +37,43 @@
     <coverage.minimum>0.00</coverage.minimum>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
+    <maven.compiler.release>${version.java}</maven.compiler.release>
     <maven.compiler.source>${version.java}</maven.compiler.source>
     <maven.compiler.target>${version.java}</maven.compiler.target>
-    <version.java>11</version.java>
+    <version.java>17</version.java>
 
-    <version.dep.codequality>1.1.1</version.dep.codequality>
-    <version.dep.junit>5.7.0</version.dep.junit>
-    <version.dep.lombok>1.18.16</version.dep.lombok>
-    <version.dep.mockito>3.6.28</version.dep.mockito>
-    <version.dep.spotbugs>4.2.0</version.dep.spotbugs>
-    <version.dep.jacoco>0.8.6</version.dep.jacoco>
+    <version.dep.checkstyle>10.7.0</version.dep.checkstyle>
+    <version.dep.codequality>1.2.0</version.dep.codequality>
+    <version.dep.immutables>2.9.3</version.dep.immutables>
+    <!-- Lombok should stay in sync with Spring Boot version. -->
+    <version.dep.lombok>1.18.26</version.dep.lombok>
+    <version.dep.mapstruct>1.5.3.Final</version.dep.mapstruct>
+    <version.dep.spotbugs>4.7.3</version.dep.spotbugs>
+    <version.dep.jacoco>0.8.8</version.dep.jacoco>
+    <version.dep.jsr305>1.2</version.dep.jsr305>
+    <version.dep.spring-boot>3.0.2</version.dep.spring-boot>
 
-    <version.plugin.build-helper>3.2.0</version.plugin.build-helper>
-    <version.plugin.checkstyle>3.1.1</version.plugin.checkstyle>
-    <version.plugin.compiler>3.8.1</version.plugin.compiler>
-    <version.plugin.coveralls>4.3.0</version.plugin.coveralls>
-    <version.plugin.failsafe>2.22.2</version.plugin.failsafe>
-    <version.plugin.formatter>2.13.0</version.plugin.formatter>
-    <version.plugin.impsort>1.4.1</version.plugin.impsort>
+    <version.plugin.build-helper>3.3.0</version.plugin.build-helper>
+    <version.plugin.checkstyle>3.2.1</version.plugin.checkstyle>
+    <version.plugin.compiler>3.10.1</version.plugin.compiler>
+    <version.plugin.failsafe>3.0.0-M8</version.plugin.failsafe>
+    <version.plugin.formatter>2.22.0</version.plugin.formatter>
+    <version.plugin.impsort>1.8.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
-    <version.plugin.javadoc>3.2.0</version.plugin.javadoc>
+    <version.plugin.javadoc>3.4.1</version.plugin.javadoc>
     <version.plugin.source>3.2.1</version.plugin.source>
-    <version.plugin.spotbugs>4.1.4</version.plugin.spotbugs>
-    <version.plugin.surefire>2.22.2</version.plugin.surefire>
+    <version.plugin.spotbugs>4.7.3.0</version.plugin.spotbugs>
+    <version.plugin.surefire>3.0.0-M8</version.plugin.surefire>
   </properties>
   
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-annotations</artifactId>
-        <version>${version.dep.spotbugs}</version>
-        <scope>provided</scope>
-        <optional>true</optional>
-      </dependency>
-      <dependency>
-        <groupId>org.jacoco</groupId>
-        <artifactId>org.jacoco.agent</artifactId>
-        <version>${version.dep.jacoco}</version>
-        <classifier>runtime</classifier>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>${version.dep.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${version.dep.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${version.dep.mockito}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${version.dep.lombok}</version>
-        <scope>provided</scope>
-        <optional>true</optional>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${version.dep.spring-boot}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -190,44 +162,6 @@
       </build>
     </profile>
     
-    <!-- coveralls.io support -->
-    <profile>
-      <id>coveralls</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        
-        <property>
-          <name>env.COVERALLS_REPO_TOKEN</name>
-        </property>
-        <file>
-          <exists>${basedir}/src/main/java</exists>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eluder.coveralls</groupId>
-            <artifactId>coveralls-maven-plugin</artifactId>
-            <version>${version.plugin.coveralls}</version>
-            <executions>
-              <execution>
-                <id>update-coveralls</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-                <configuration>
-                  <jacocoReports>${project.build.directory}/coverage/report/jacoco.xml</jacocoReports>
-                  <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-                  <skip>${skipTests}</skip>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    
     <!-- Integration test support -->
     <profile>
       <id>integration-test</id>
@@ -240,50 +174,36 @@
       
       <dependencies>
         <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
+          <scope>test</scope>
         </dependency>
       </dependencies>
       
       <build>
         <plugins>
           <plugin>
-            <groupId>net.revelc.code</groupId>
-            <artifactId>impsort-maven-plugin</artifactId>
-            <version>${version.plugin.impsort}</version>
-            <executions>
-              <execution>
-                <id>organize-imports-it</id>
-                <goals>
-                  <goal>sort</goal>
-                </goals>
-                <configuration>
-                  <directories>
-                    <directory>${basedir}/src/it/java</directory>
-                  </directories>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
             <configuration>
               <parallel>classes</parallel>
-              <systemPropertyVariables>
-                <jacoco-agent.destfile>
-                  ${project.build.directory}/coverage/jacoco-integration.exec
-                </jacoco-agent.destfile>
-              </systemPropertyVariables>
+              <argLine>@{argLine}</argLine>
               <threadCount>4</threadCount>
             </configuration>
             <executions>
@@ -333,16 +253,13 @@
             <version>${version.plugin.jacoco}</version>
             <executions>
               <execution>
-                <id>jacoco-integration-test-instrument-classes</id>
+                <id>jacoco-integration-test-prepare</id>
                 <goals>
-                  <goal>instrument</goal>
+                  <goal>prepare-agent-integration</goal>
                 </goals>
-              </execution>
-              <execution>
-                <id>jacoco-integration-test-restore-classes</id>
-                <goals>
-                  <goal>restore-instrumented-classes</goal>
-                </goals>
+                <configuration>
+                  <destFile>${project.build.directory}/coverage/jacoco-integration.exec</destFile>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -364,10 +281,50 @@
         <dependency>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
+          <version>${version.dep.spotbugs}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+          <exclusions>
+            <!-- Doesn't play well with JPMS. -->
+            <exclusion>
+              <groupId>com.google.code.findbugs</groupId>
+              <artifactId>jsr305</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>no.ssb.jpms</groupId>
+          <artifactId>jsr305-and-javax.annotation-api</artifactId>
+          <version>${version.dep.jsr305}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.immutables</groupId>
+          <artifactId>value</artifactId>
+          <version>${version.dep.immutables}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.mapstruct</groupId>
+          <artifactId>mapstruct</artifactId>
+          <version>${version.dep.mapstruct}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.mapstruct</groupId>
+          <artifactId>mapstruct-processor</artifactId>
+          <version>${version.dep.mapstruct}</version>
+          <scope>provided</scope>
+          <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
+          <scope>provided</scope>
+          <optional>true</optional>
         </dependency>
       </dependencies>
       
@@ -402,9 +359,21 @@
                   <goal>sort</goal>
                 </goals>
                 <configuration>
+                  <breadthFirstComparator>true</breadthFirstComparator>
                   <directories>
+                    <directory>${basedir}/src/it/java</directory>
                     <directory>${basedir}/src/main/java</directory>
+                    <directory>${basedir}/src/test/java</directory>
                   </directories>
+                  <excludes>
+                    <exclude>**/module-info.java</exclude>
+                  </excludes>
+                  <groups>java.,javax.</groups>
+                  <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
+                  <lineEnding>LF</lineEnding>
+                  <removeUnused>true</removeUnused>
+                  <staticAfter>false</staticAfter>
+                  <staticGroups>*</staticGroups>
                 </configuration>
               </execution>
             </executions>
@@ -452,6 +421,11 @@
                 <groupId>com.handcraftedbits</groupId>
                 <artifactId>handcraftedbits-codequality</artifactId>
                 <version>${version.dep.codequality}</version>
+              </dependency>
+              <dependency>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>${version.dep.checkstyle}</version>
               </dependency>
             </dependencies>
             <executions>
@@ -519,8 +493,12 @@
                 <configuration>
                   <skip>${javadoc.skip}</skip>
                   <additionalparam>-Xdoclint:none</additionalparam>
+                  <detectLinks />
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
-                  <links combine.children="append" />
+                  <links combine.children="append">
+                    <link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link>
+                    <link>https://projectlombok.org/api/</link>
+                  </links>
                 </configuration>
               </execution>
             </executions>
@@ -554,53 +532,36 @@
       
       <dependencies>
         <dependency>
-          <groupId>org.jacoco</groupId>
-          <artifactId>org.jacoco.agent</artifactId>
-          <classifier>runtime</classifier>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-core</artifactId>
+          <scope>test</scope>
         </dependency>
       </dependencies>
       
       <build>
         <plugins>
           <plugin>
-            <groupId>net.revelc.code</groupId>
-            <artifactId>impsort-maven-plugin</artifactId>
-            <version>${version.plugin.impsort}</version>
-            <executions>
-              <execution>
-                <id>organize-imports-test</id>
-                <goals>
-                  <goal>sort</goal>
-                </goals>
-                <configuration>
-                  <directories>
-                    <directory>${basedir}/src/test/java</directory>
-                  </directories>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
             <configuration>
               <parallel>classes</parallel>
-              <systemPropertyVariables>
-                <jacoco-agent.destfile>${project.build.directory}/coverage/jacoco-unit.exec</jacoco-agent.destfile>
-              </systemPropertyVariables>
+              <argLine>@{argLine}</argLine>
               <threadCount>4</threadCount>
             </configuration>
           </plugin>
@@ -610,16 +571,13 @@
             <version>${version.plugin.jacoco}</version>
             <executions>
               <execution>
-                <id>jacoco-unit-test-instrument-classes</id>
+                <id>jacoco-uint-test-prepare</id>
                 <goals>
-                  <goal>instrument</goal>
+                  <goal>prepare-agent</goal>
                 </goals>
-              </execution>
-              <execution>
-                <id>jacoco-unit-test-restore-classes</id>
-                <goals>
-                  <goal>restore-instrumented-classes</goal>
-                </goals>
+                <configuration>
+                  <destFile>${project.build.directory}/coverage/jacoco-unit.exec</destFile>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -627,73 +585,4 @@
       </build>
     </profile>
   </profiles>
-  
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>net.revelc.code</groupId>
-          <artifactId>impsort-maven-plugin</artifactId>
-          <version>${version.plugin.impsort}</version>
-          <configuration>
-            <breadthFirstComparator>true</breadthFirstComparator>
-            <groups>java.,javax.</groups>
-            <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
-            <lineEnding>LF</lineEnding>
-            <removeUnused>true</removeUnused>
-            <staticAfter>false</staticAfter>
-            <staticGroups>*</staticGroups>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>net.revelc.code.formatter</groupId>
-          <artifactId>formatter-maven-plugin</artifactId>
-          <version>${version.plugin.formatter}</version>
-          <dependencies>
-            <dependency>
-              <groupId>com.handcraftedbits</groupId>
-              <artifactId>handcraftedbits-codequality</artifactId>
-              <version>${version.dep.codequality}</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>format-java</id>
-              <goals>
-                <goal>format</goal>
-              </goals>
-              <configuration>
-                <configFile>formatter-handcraftedbits.xml</configFile>
-                <directories>
-                  <directory>${basedir}/src/it/java</directory>
-                  <directory>${basedir}/src/main/java</directory>
-                  <directory>${basedir}/src/test/java</directory>
-                </directories>
-                <lineEnding>LF</lineEnding>
-                <skipCssFormatting>true</skipCssFormatting>
-                <skipHtmlFormatting>true</skipHtmlFormatting>
-                <skipJsFormatting>true</skipJsFormatting>
-                <skipJsonFormatting>true</skipJsonFormatting>
-                <skipXmlFormatting>true</skipXmlFormatting>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${version.plugin.compiler}</version>
-          <configuration>
-            <annotationProcessorPaths>
-              <path>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${version.dep.lombok}</version>
-              </path>
-            </annotationProcessorPaths>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>
