@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2023 HandcraftedBits
+  Copyright (C) 2015-2025 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -62,13 +62,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
    
-    <version.dep.handcraftedbits-license>1.0.3</version.dep.handcraftedbits-license>
+    <version.dep.handcraftedbits-license>1.0.5-SNAPSHOT</version.dep.handcraftedbits-license>
     <version.maven.minimum>3.8.4</version.maven.minimum>
     
-    <version.plugin.enforcer>3.2.1</version.plugin.enforcer>
-    <version.plugin.gpg>3.0.1</version.plugin.gpg>
-    <version.plugin.license>4.1</version.plugin.license>
-    <version.plugin.nexus-staging>1.6.13</version.plugin.nexus-staging>
+    <version.plugin.enforcer>3.5.0</version.plugin.enforcer>
+    <version.plugin.gpg>3.2.7</version.plugin.gpg>
+    <version.plugin.license>5.0.0</version.plugin.license>
+    <version.plugin.nexus-staging>1.7.0</version.plugin.nexus-staging>
+    <version.plugin.resources>3.3.1</version.plugin.resources>
   </properties>
 
   <modules>
@@ -82,7 +83,20 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-    
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${version.plugin.resources}</version>
+          <configuration>
+            <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
