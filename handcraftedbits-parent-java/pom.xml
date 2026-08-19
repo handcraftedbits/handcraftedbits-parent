@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2025 HandcraftedBits
+  Copyright (C) 2015-2026 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
   </parent>
 
   <properties>
@@ -46,33 +46,33 @@
     <maven.compiler.target>${version.java}</maven.compiler.target>
     <!--suppress CheckTagEmptyBody -->
     <test.args.extra></test.args.extra>
-    <version.java>21</version.java>
+    <version.java>25</version.java>
 
-    <version.dep.checkstyle>10.21.4</version.dep.checkstyle>
+    <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
     <version.dep.codequality>1.2.1-SNAPSHOT</version.dep.codequality>
-    <version.dep.immutables>2.10.1</version.dep.immutables>
+    <version.dep.immutables>2.12.2</version.dep.immutables>
+    <version.dep.junit-pioneer>2.3.0</version.dep.junit-pioneer>
     <!-- Lombok should stay in sync with Spring Boot version. -->
-    <version.dep.lombok>1.18.36</version.dep.lombok>
+    <version.dep.lombok>1.18.46</version.dep.lombok>
     <version.dep.mapstruct>1.6.3</version.dep.mapstruct>
-    <version.dep.spotbugs>4.9.3</version.dep.spotbugs>
-    <version.dep.jacoco>0.8.12</version.dep.jacoco>
-    <version.dep.jsr305>1.2</version.dep.jsr305>
-    <version.dep.spring-boot>3.4.4</version.dep.spring-boot>
+    <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
+    <version.dep.jacoco>0.8.15</version.dep.jacoco>
+    <version.dep.spring-boot>4.1.0</version.dep.spring-boot>
 
-    <version.plugin.build-helper>3.6.0</version.plugin.build-helper>
-    <version.plugin.clean>3.4.1</version.plugin.clean>
+    <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
+    <version.plugin.clean>3.5.0</version.plugin.clean>
     <version.plugin.checkstyle>3.6.0</version.plugin.checkstyle>
-    <version.plugin.compiler>3.14.0</version.plugin.compiler>
-    <version.plugin.dependency>3.8.1</version.plugin.dependency>
-    <version.plugin.failsafe>3.5.2</version.plugin.failsafe>
-    <version.plugin.formatter>2.26.0</version.plugin.formatter>
-    <version.plugin.impsort>1.12.0</version.plugin.impsort>
+    <version.plugin.compiler>3.15.0</version.plugin.compiler>
+    <version.plugin.dependency>3.11.0</version.plugin.dependency>
+    <version.plugin.failsafe>3.5.6</version.plugin.failsafe>
+    <version.plugin.formatter>2.29.0</version.plugin.formatter>
+    <version.plugin.impsort>1.13.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
-    <version.plugin.javadoc>3.11.2</version.plugin.javadoc>
+    <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
     <version.plugin.lombok>1.18.20.0</version.plugin.lombok>
-    <version.plugin.source>3.3.1</version.plugin.source>
-    <version.plugin.spotbugs>4.9.3.0</version.plugin.spotbugs>
-    <version.plugin.surefire>3.5.2</version.plugin.surefire>
+    <version.plugin.source>3.4.0</version.plugin.source>
+    <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
+    <version.plugin.surefire>3.5.6</version.plugin.surefire>
   </properties>
 
   <dependencyManagement>
@@ -88,6 +88,21 @@
   </dependencyManagement>
 
   <profiles>
+    <!-- Automatically add Checkstyle supression file if it exists. -->
+    <profile>
+      <id>checkstyle-suppress</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/codequality/checkstyle-suppressions.xml</exists>
+        </file>
+      </activation>
+
+      <properties>
+        <checkstyle.suppressions.location>src/main/codequality/checkstyle-suppressions.xml</checkstyle.suppressions.location>
+      </properties>
+    </profile>
+
     <!-- Code coverage reporting and enforcement -->
     <profile>
       <id>code-coverage</id>
@@ -192,6 +207,12 @@
           <scope>test</scope>
         </dependency>
         <dependency>
+          <groupId>org.junit-pioneer</groupId>
+          <artifactId>junit-pioneer</artifactId>
+          <version>${version.dep.junit-pioneer}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
           <scope>test</scope>
@@ -257,7 +278,8 @@
             <version>${version.plugin.failsafe}</version>
             <configuration>
               <parallel>classes</parallel>
-              <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
+              <!--suppress MavenModelInspection -->
+                <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
             </configuration>
             <executions>
@@ -347,13 +369,6 @@
           </exclusions>
         </dependency>
         <dependency>
-          <groupId>no.ssb.jpms</groupId>
-          <artifactId>jsr305-and-javax.annotation-api</artifactId>
-          <version>${version.dep.jsr305}</version>
-          <scope>provided</scope>
-          <optional>true</optional>
-        </dependency>
-        <dependency>
           <groupId>org.immutables</groupId>
           <artifactId>value</artifactId>
           <version>${version.dep.immutables}</version>
@@ -389,10 +404,6 @@
                 <goals>
                   <goal>check</goal>
                 </goals>
-                <configuration>
-                  <maxRank>20</maxRank>
-                  <threshold>Low</threshold>
-                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -519,6 +530,7 @@
                   <version>${version.dep.spring-boot}</version>
                 </dependency>
               </annotationProcessorPaths>
+              <parameters>true</parameters>
             </configuration>
           </plugin>
           <plugin>
@@ -595,8 +607,14 @@
                   <doclint>none</doclint>
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
                   <links combine.children="append">
-                    <link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link>
+                    <link>https://jakarta.ee/specifications/annotations/2.1/apidocs/</link>
+                    <link>https://javadoc.io/doc/jakarta.validation/jakarta.validation-api/latest/</link>
+                    <!-- TODO: re-enable if/when Javadocs show up again. -->
+                    <!--link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link-->
                     <link>https://projectlombok.org/api/</link>
+                    <link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
+                    <link>https://docs.spring.io/spring-boot/api/java/</link>
+                    <link>https://docs.jboss.org/hibernate/stable/validator/api/</link>
                   </links>
                   <sourcepath>${project.build.directory}/generated-sources/annotations:${project.build.directory}/generated-sources/delombok</sourcepath>
                 </configuration>
@@ -641,7 +659,31 @@
         </plugins>
       </build>
     </profile>
-    
+
+    <!-- Automatically add Spotbugs exclusion file if it exists. -->
+    <profile>
+      <id>spotbugs-exclude</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/codequality/spotbugs-exclude.xml</exists>
+        </file>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${version.plugin.spotbugs}</version>
+            <configuration>
+              <excludeFilterFile>src/main/codequality/spotbugs-exclude.xml</excludeFilterFile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- Unit test support -->
     <profile>
       <id>unit-test</id>
@@ -656,6 +698,12 @@
         <dependency>
           <groupId>org.assertj</groupId>
           <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.junit-pioneer</groupId>
+          <artifactId>junit-pioneer</artifactId>
+          <version>${version.dep.junit-pioneer}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -724,6 +772,7 @@
             <version>${version.plugin.surefire}</version>
             <configuration>
               <parallel>classes</parallel>
+              <!--suppress MavenModelInspection -->
               <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
             </configuration>
