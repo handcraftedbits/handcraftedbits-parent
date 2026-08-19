@@ -16,7 +16,7 @@ on:
 
 jobs:
   publish:
-    uses: handcraftedbits/github-workflows/.github/workflows/maven-central-publish.yml@v1
+    uses: handcraftedbits/github-workflows/.github/workflows/maven-publish.yml@v1
     with:
       ref: ${{ inputs.ref || '' }}
     secrets: inherit
