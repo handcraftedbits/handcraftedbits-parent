@@ -63,10 +63,10 @@
     <license.type>ASL2</license.type>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-   
-    <version.dep.handcraftedbits-license>1.0.5-SNAPSHOT</version.dep.handcraftedbits-license>
+
+    <version.dep.handcraftedbits-license>1.1.0</version.dep.handcraftedbits-license>
     <version.maven.minimum>3.8.4</version.maven.minimum>
-    
+
     <version.plugin.central-publishing>0.11.0</version.plugin.central-publishing>
     <version.plugin.enforcer>3.6.3</version.plugin.enforcer>
     <version.plugin.flatten>1.8.0</version.plugin.flatten>
@@ -176,6 +176,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${version.plugin.gpg}</version>
+            <configuration>
+              <signer>bc</signer>
+            </configuration>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -193,7 +196,7 @@
             <configuration>
               <publishingServerId>central</publishingServerId>
               <autoPublish>true</autoPublish>
-              <waitUntil>published</waitUntil>
+              <waitUntil>validated</waitUntil>
             </configuration>
           </plugin>
         </plugins>
