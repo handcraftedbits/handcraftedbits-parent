@@ -8,7 +8,24 @@ A parent POM used by HandcraftedBits Maven projects.
 
 * **Active by default?**: no
 * **Activated by**: flag
-* **Purpose**: Used with `deploy` goal to sign artifacts and push to [Nexus](https://oss.sonatype.org).
+* **Purpose**: Used with the `deploy` goal to sign artifacts and publish them to
+  [Maven Central](https://central.sonatype.com) via the
+  [Central Publisher Portal](https://central.sonatype.org/publish/publish-portal-maven/).
+
+Requires a `central` server entry in `~/.m2/settings.xml` holding a Central Portal user token (generated at
+https://central.sonatype.com/account) — not your account password:
+
+```xml
+<server>
+  <id>central</id>
+  <username><!-- token username --></username>
+  <password><!-- token password --></password>
+</server>
+```
+
+Run with `mvn -P release deploy`.  Snapshot versions are uploaded to
+https://central.sonatype.com/repository/maven-snapshots/; release versions are staged in the Portal and published
+automatically once validation passes.
 
 ## update-copyright
 

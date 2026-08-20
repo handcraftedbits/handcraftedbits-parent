@@ -1,0 +1,22 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - development
+    tags:
+      - 'release/*'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Ref to publish (e.g. release/1.0.0).  Defaults to this branch.'
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  publish:
+    uses: handcraftedbits/github-workflows/.github/workflows/maven-publish.yml@v1
+    with:
+      ref: ${{ inputs.ref || '' }}
+    secrets: inherit

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2023 HandcraftedBits
+  Copyright (C) 2015-2026 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -29,43 +29,53 @@
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
     <version>1.6.0</version>
+    <version>${revision}${changelist}</version>
   </parent>
 
   <properties>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.branch.minimum>0.00</coverage.branch.minimum>
+    <!--suppress CheckTagEmptyBody -->
+    <coverage.check.excludePattern></coverage.check.excludePattern>
+    <!--suppress CheckTagEmptyBody -->
+    <coverage.report.excludePattern></coverage.report.excludePattern>
     <coverage.minimum>0.00</coverage.minimum>
     <javadoc.excludedPackages>*.internal.*</javadoc.excludedPackages>
     <javadoc.skip>false</javadoc.skip>
     <maven.compiler.release>${version.java}</maven.compiler.release>
     <maven.compiler.source>${version.java}</maven.compiler.source>
     <maven.compiler.target>${version.java}</maven.compiler.target>
-    <version.java>17</version.java>
+    <!--suppress CheckTagEmptyBody -->
+    <test.args.extra></test.args.extra>
+    <version.java>25</version.java>
 
-    <version.dep.checkstyle>10.7.0</version.dep.checkstyle>
-    <version.dep.codequality>1.2.0</version.dep.codequality>
-    <version.dep.immutables>2.9.3</version.dep.immutables>
+    <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
+    <version.dep.codequality>1.2.1-SNAPSHOT</version.dep.codequality>
+    <version.dep.immutables>2.12.2</version.dep.immutables>
+    <version.dep.junit-pioneer>2.3.0</version.dep.junit-pioneer>
     <!-- Lombok should stay in sync with Spring Boot version. -->
-    <version.dep.lombok>1.18.26</version.dep.lombok>
-    <version.dep.mapstruct>1.5.3.Final</version.dep.mapstruct>
-    <version.dep.spotbugs>4.7.3</version.dep.spotbugs>
-    <version.dep.jacoco>0.8.8</version.dep.jacoco>
-    <version.dep.jsr305>1.2</version.dep.jsr305>
-    <version.dep.spring-boot>3.0.2</version.dep.spring-boot>
+    <version.dep.lombok>1.18.46</version.dep.lombok>
+    <version.dep.mapstruct>1.6.3</version.dep.mapstruct>
+    <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
+    <version.dep.jacoco>0.8.15</version.dep.jacoco>
+    <version.dep.spring-boot>4.1.0</version.dep.spring-boot>
 
-    <version.plugin.build-helper>3.3.0</version.plugin.build-helper>
-    <version.plugin.checkstyle>3.2.1</version.plugin.checkstyle>
-    <version.plugin.compiler>3.10.1</version.plugin.compiler>
-    <version.plugin.failsafe>3.0.0-M8</version.plugin.failsafe>
-    <version.plugin.formatter>2.22.0</version.plugin.formatter>
-    <version.plugin.impsort>1.8.0</version.plugin.impsort>
+    <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
+    <version.plugin.clean>3.5.0</version.plugin.clean>
+    <version.plugin.checkstyle>3.6.0</version.plugin.checkstyle>
+    <version.plugin.compiler>3.15.0</version.plugin.compiler>
+    <version.plugin.dependency>3.11.0</version.plugin.dependency>
+    <version.plugin.failsafe>3.5.6</version.plugin.failsafe>
+    <version.plugin.formatter>2.29.0</version.plugin.formatter>
+    <version.plugin.impsort>1.13.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
-    <version.plugin.javadoc>3.4.1</version.plugin.javadoc>
-    <version.plugin.source>3.2.1</version.plugin.source>
-    <version.plugin.spotbugs>4.7.3.0</version.plugin.spotbugs>
-    <version.plugin.surefire>3.0.0-M8</version.plugin.surefire>
+    <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
+    <version.plugin.lombok>1.18.20.0</version.plugin.lombok>
+    <version.plugin.source>3.4.0</version.plugin.source>
+    <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
+    <version.plugin.surefire>3.5.6</version.plugin.surefire>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -77,8 +87,23 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <profiles>
+    <!-- Automatically add Checkstyle supression file if it exists. -->
+    <profile>
+      <id>checkstyle-suppress</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/codequality/checkstyle-suppressions.xml</exists>
+        </file>
+      </activation>
+
+      <properties>
+        <checkstyle.suppressions.location>src/main/codequality/checkstyle-suppressions.xml</checkstyle.suppressions.location>
+      </properties>
+    </profile>
+
     <!-- Code coverage reporting and enforcement -->
     <profile>
       <id>code-coverage</id>
@@ -88,7 +113,7 @@
           <exists>${basedir}/src/main/java</exists>
         </file>
       </activation>
-      
+
       <build>
         <plugins>
           <plugin>
@@ -121,6 +146,9 @@
                 </goals>
                 <configuration>
                   <dataFile>${project.build.directory}/coverage/jacoco-final.exec</dataFile>
+                  <excludes>
+                    <exclude>${coverage.report.excludePattern}</exclude>
+                  </excludes>
                   <outputDirectory>${project.build.directory}/coverage/report</outputDirectory>
                 </configuration>
               </execution>
@@ -139,6 +167,7 @@
                         <exclude>*IT*</exclude>
                         <exclude>*Test</exclude>
                         <exclude>*Test*</exclude>
+                        <exclude>${coverage.check.excludePattern}</exclude>
                       </excludes>
                       <limits>
                         <limit>
@@ -161,7 +190,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <!-- Integration test support -->
     <profile>
       <id>integration-test</id>
@@ -171,11 +200,17 @@
           <exists>${basedir}/src/it</exists>
         </file>
       </activation>
-      
+
       <dependencies>
         <dependency>
           <groupId>org.assertj</groupId>
           <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.junit-pioneer</groupId>
+          <artifactId>junit-pioneer</artifactId>
+          <version>${version.dep.junit-pioneer}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -194,16 +229,58 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
-      
+
       <build>
         <plugins>
+          <plugin>
+            <groupId>net.revelc.code</groupId>
+            <artifactId>impsort-maven-plugin</artifactId>
+            <version>${version.plugin.impsort}</version>
+            <executions>
+              <execution>
+                <id>organize-imports-it</id>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+                <configuration>
+                  <breadthFirstComparator>true</breadthFirstComparator>
+                  <directories>
+                    <directory>${basedir}/src/it/java</directory>
+                  </directories>
+                  <excludes>
+                    <exclude>**/module-info.java</exclude>
+                  </excludes>
+                  <groups>java.,javax.</groups>
+                  <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
+                  <lineEnding>LF</lineEnding>
+                  <removeUnused>true</removeUnused>
+                  <staticAfter>false</staticAfter>
+                  <staticGroups>*</staticGroups>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${version.plugin.dependency}</version>
+            <executions>
+              <execution>
+                <id>mockito-integration-test-prepare</id>
+                <goals>
+                  <goal>properties</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
             <configuration>
               <parallel>classes</parallel>
-              <argLine>@{argLine}</argLine>
+              <!--suppress MavenModelInspection -->
+                <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
             </configuration>
             <executions>
@@ -266,7 +343,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <!-- Basic settings for Java projects -->
     <profile>
       <id>java-project</id>
@@ -276,7 +353,7 @@
           <exists>${basedir}/src/main/java</exists>
         </file>
       </activation>
-      
+
       <dependencies>
         <dependency>
           <groupId>com.github.spotbugs</groupId>
@@ -293,13 +370,6 @@
           </exclusions>
         </dependency>
         <dependency>
-          <groupId>no.ssb.jpms</groupId>
-          <artifactId>jsr305-and-javax.annotation-api</artifactId>
-          <version>${version.dep.jsr305}</version>
-          <scope>provided</scope>
-          <optional>true</optional>
-        </dependency>
-        <dependency>
           <groupId>org.immutables</groupId>
           <artifactId>value</artifactId>
           <version>${version.dep.immutables}</version>
@@ -314,20 +384,14 @@
           <optional>true</optional>
         </dependency>
         <dependency>
-          <groupId>org.mapstruct</groupId>
-          <artifactId>mapstruct-processor</artifactId>
-          <version>${version.dep.mapstruct}</version>
-          <scope>provided</scope>
-          <optional>true</optional>
-        </dependency>
-        <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
+          <version>${version.dep.lombok}</version>
           <scope>provided</scope>
           <optional>true</optional>
         </dependency>
       </dependencies>
-      
+
       <build>
         <plugins>
           <plugin>
@@ -341,10 +405,6 @@
                 <goals>
                   <goal>check</goal>
                 </goals>
-                <configuration>
-                  <maxRank>20</maxRank>
-                  <threshold>Low</threshold>
-                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -361,9 +421,7 @@
                 <configuration>
                   <breadthFirstComparator>true</breadthFirstComparator>
                   <directories>
-                    <directory>${basedir}/src/it/java</directory>
                     <directory>${basedir}/src/main/java</directory>
-                    <directory>${basedir}/src/test/java</directory>
                   </directories>
                   <excludes>
                     <exclude>**/module-info.java</exclude>
@@ -448,6 +506,36 @@
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${version.plugin.compiler}</version>
+            <configuration>
+              <annotationProcessorPaths combine.children="append">
+                <dependency>
+                  <groupId>org.immutables</groupId>
+                  <artifactId>value</artifactId>
+                  <version>${version.dep.immutables}</version>
+                </dependency>
+                <dependency>
+                  <groupId>org.mapstruct</groupId>
+                  <artifactId>mapstruct-processor</artifactId>
+                  <version>${version.dep.mapstruct}</version>
+                </dependency>
+                <dependency>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+                  <version>${version.dep.lombok}</version>
+                </dependency>
+                <dependency>
+                  <groupId>org.springframework.boot</groupId>
+                  <artifactId>spring-boot-configuration-processor</artifactId>
+                  <version>${version.dep.spring-boot}</version>
+                </dependency>
+              </annotationProcessorPaths>
+              <parameters>true</parameters>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-enforcer-plugin</artifactId>
             <version>${version.plugin.enforcer}</version>
             <executions>
@@ -469,7 +557,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <!-- Additional plugins executed on release -->
     <profile>
       <id>release</id>
@@ -479,6 +567,30 @@
 
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven-plugin</artifactId>
+            <version>${version.plugin.lombok}</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${version.dep.lombok}</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>delombok-for-javadoc</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>delombok</goal>
+                </goals>
+                <configuration>
+                  <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -492,13 +604,42 @@
                 </goals>
                 <configuration>
                   <skip>${javadoc.skip}</skip>
-                  <additionalparam>-Xdoclint:none</additionalparam>
                   <detectLinks />
+                  <doclint>none</doclint>
                   <excludePackageNames>${javadoc.excludedPackages}</excludePackageNames>
                   <links combine.children="append">
-                    <link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link>
+                    <link>https://jakarta.ee/specifications/annotations/2.1/apidocs/</link>
+                    <link>https://javadoc.io/doc/jakarta.validation/jakarta.validation-api/latest/</link>
+                    <!-- TODO: re-enable if/when Javadocs show up again. -->
+                    <!--link>https://javadoc.io/doc/org.immutables/value-annotations/${version.dep.immutables}/</link-->
                     <link>https://projectlombok.org/api/</link>
+                    <link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
+                    <link>https://docs.spring.io/spring-boot/api/java/</link>
+                    <link>https://docs.jboss.org/hibernate/stable/validator/api/</link>
                   </links>
+                  <sourcepath>${project.build.directory}/generated-sources/annotations:${project.build.directory}/generated-sources/delombok</sourcepath>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>${version.plugin.clean}</version>
+            <executions>
+              <execution>
+                <id>remove-delombok-sources</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>clean</goal>
+                </goals>
+                <configuration>
+                  <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                  <filesets>
+                    <fileset>
+                      <directory>${project.build.directory}/generated-sources/delombok</directory>
+                    </fileset>
+                  </filesets>
                 </configuration>
               </execution>
             </executions>
@@ -519,7 +660,31 @@
         </plugins>
       </build>
     </profile>
-    
+
+    <!-- Automatically add Spotbugs exclusion file if it exists. -->
+    <profile>
+      <id>spotbugs-exclude</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/codequality/spotbugs-exclude.xml</exists>
+        </file>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${version.plugin.spotbugs}</version>
+            <configuration>
+              <excludeFilterFile>src/main/codequality/spotbugs-exclude.xml</excludeFilterFile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- Unit test support -->
     <profile>
       <id>unit-test</id>
@@ -529,11 +694,17 @@
           <exists>${basedir}/src/test/java</exists>
         </file>
       </activation>
-      
+
       <dependencies>
         <dependency>
           <groupId>org.assertj</groupId>
           <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.junit-pioneer</groupId>
+          <artifactId>junit-pioneer</artifactId>
+          <version>${version.dep.junit-pioneer}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -552,16 +723,58 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
-      
+
       <build>
         <plugins>
+          <plugin>
+            <groupId>net.revelc.code</groupId>
+            <artifactId>impsort-maven-plugin</artifactId>
+            <version>${version.plugin.impsort}</version>
+            <executions>
+              <execution>
+                <id>organize-imports-test</id>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+                <configuration>
+                  <breadthFirstComparator>true</breadthFirstComparator>
+                  <directories>
+                    <directory>${basedir}/src/test/java</directory>
+                  </directories>
+                  <excludes>
+                    <exclude>**/module-info.java</exclude>
+                  </excludes>
+                  <groups>java.,javax.</groups>
+                  <joinStaticWithNonStatic>false</joinStaticWithNonStatic>
+                  <lineEnding>LF</lineEnding>
+                  <removeUnused>true</removeUnused>
+                  <staticAfter>false</staticAfter>
+                  <staticGroups>*</staticGroups>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${version.plugin.dependency}</version>
+            <executions>
+              <execution>
+                <id>mockito-unit-test-prepare</id>
+                <goals>
+                  <goal>properties</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
             <configuration>
               <parallel>classes</parallel>
-              <argLine>@{argLine}</argLine>
+              <!--suppress MavenModelInspection -->
+              <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
             </configuration>
           </plugin>
@@ -571,7 +784,7 @@
             <version>${version.plugin.jacoco}</version>
             <executions>
               <execution>
-                <id>jacoco-uint-test-prepare</id>
+                <id>jacoco-unit-test-prepare</id>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>

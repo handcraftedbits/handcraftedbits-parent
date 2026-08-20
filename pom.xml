@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2023 HandcraftedBits
+  Copyright (C) 2015-2026 HandcraftedBits
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -25,7 +24,7 @@
   <name>HandcraftedBits Parent POM</name>
   <description>A parent POM used by HandcraftedBits projects</description>
   <url>https://github.com/handcraftedbits/handcraftedbits-parent</url>
-  <version>1.6.0</version>
+  <version>${revision}${changelist}</version>
   <inceptionYear>2015</inceptionYear>
 
   <developers>
@@ -58,17 +57,23 @@
   </issueManagement>
 
   <properties>
+    <revision>1.7.1</revision>
+    <changelist>-SNAPSHOT</changelist>
+
     <license.type>ASL2</license.type>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-   
-    <version.dep.handcraftedbits-license>1.0.3</version.dep.handcraftedbits-license>
+
+    <version.dep.handcraftedbits-license>1.1.0</version.dep.handcraftedbits-license>
     <version.maven.minimum>3.8.4</version.maven.minimum>
-    
-    <version.plugin.enforcer>3.2.1</version.plugin.enforcer>
-    <version.plugin.gpg>3.0.1</version.plugin.gpg>
-    <version.plugin.license>4.1</version.plugin.license>
-    <version.plugin.nexus-staging>1.6.13</version.plugin.nexus-staging>
+
+    <version.plugin.central-publishing>0.11.0</version.plugin.central-publishing>
+    <version.plugin.enforcer>3.6.3</version.plugin.enforcer>
+    <version.plugin.flatten>1.8.0</version.plugin.flatten>
+    <version.plugin.gpg>3.2.8</version.plugin.gpg>
+    <version.plugin.license>5.1.1</version.plugin.license>
+    <version.plugin.resources>3.5.0</version.plugin.resources>
+    <version.plugin.versions>2.21.0</version.plugin.versions>
   </properties>
 
   <modules>
@@ -82,8 +87,58 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-    
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>${version.plugin.flatten}</version>
+          <configuration>
+            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+            <updatePomFile>true</updatePomFile>
+          </configuration>
+          <executions>
+            <execution>
+              <id>flatten</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>flatten-clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${version.plugin.resources}</version>
+          <configuration>
+            <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+          </configuration>
+        </plugin>
+        <!-- Invoked from the command line only; see README.md. -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${version.plugin.versions}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
+      <!-- Declared here rather than in pluginManagement alone so that inheriting projects pick up the executions. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>${version.plugin.flatten}</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -121,6 +176,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${version.plugin.gpg}</version>
+            <configuration>
+              <signer>bc</signer>
+            </configuration>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -131,28 +189,18 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>${version.plugin.nexus-staging}</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${version.plugin.central-publishing}</version>
+            <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>validated</waitUntil>
             </configuration>
           </plugin>
         </plugins>
       </build>
-
-      <distributionManagement>
-        <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-      </distributionManagement>
     </profile>
 
     <!-- Update copyright on source files -->
