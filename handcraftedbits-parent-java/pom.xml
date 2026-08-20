@@ -28,7 +28,6 @@
   <parent>
     <groupId>com.handcraftedbits</groupId>
     <artifactId>handcraftedbits-parent</artifactId>
-    <version>1.6.0</version>
     <version>${revision}${changelist}</version>
   </parent>
 
