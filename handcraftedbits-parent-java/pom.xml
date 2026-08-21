@@ -49,7 +49,6 @@
     <version.java>25</version.java>
 
     <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
-    <version.dep.codequality>1.2.1-SNAPSHOT</version.dep.codequality>
     <version.dep.immutables>2.12.2</version.dep.immutables>
     <version.dep.junit-pioneer>2.3.0</version.dep.junit-pioneer>
     <!-- Lombok should stay in sync with Spring Boot version. -->
@@ -88,7 +87,7 @@
   </dependencyManagement>
 
   <profiles>
-    <!-- Automatically add Checkstyle supression file if it exists. -->
+    <!-- Automatically add Checkstyle suppression file if it exists. -->
     <profile>
       <id>checkstyle-suppress</id>
       <activation>
@@ -443,7 +442,7 @@
               <dependency>
                 <groupId>com.handcraftedbits</groupId>
                 <artifactId>handcraftedbits-codequality</artifactId>
-                <version>${version.dep.codequality}</version>
+                <version>${version.dep.handcraftedbits-codequality}</version>
               </dependency>
             </dependencies>
             <executions>
@@ -477,7 +476,7 @@
               <dependency>
                 <groupId>com.handcraftedbits</groupId>
                 <artifactId>handcraftedbits-codequality</artifactId>
-                <version>${version.dep.codequality}</version>
+                <version>${version.dep.handcraftedbits-codequality}</version>
               </dependency>
               <dependency>
                 <groupId>com.puppycrawl.tools</groupId>
@@ -693,7 +692,7 @@
           <exists>${basedir}/src/test/java</exists>
         </file>
       </activation>
-      
+
       <dependencies>
         <dependency>
           <groupId>org.assertj</groupId>
@@ -722,7 +721,7 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
-      
+
       <build>
         <plugins>
           <plugin>
