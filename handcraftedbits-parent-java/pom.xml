@@ -287,21 +287,21 @@
             <configuration>
               <parallel>classes</parallel>
               <!--suppress MavenModelInspection -->
-              <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
+              <argLine>@{argLine} -Xshare:off -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
               <reportFormat>plain</reportFormat>
               <consoleOutputReporter>
                 <disable>true</disable>
               </consoleOutputReporter>
               <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
-                <hideResultsOnSuccess>${test.reporter.quiet}</hideResultsOnSuccess>
+                <hideResultsOnSuccess>true</hideResultsOnSuccess>
                 <printStacktraceOnError>true</printStacktraceOnError>
                 <printStacktraceOnFailure>true</printStacktraceOnFailure>
                 <printStderrOnError>true</printStderrOnError>
                 <printStderrOnFailure>true</printStderrOnFailure>
                 <printStdoutOnError>true</printStdoutOnError>
                 <printStdoutOnFailure>true</printStdoutOnFailure>
-                <theme>${test.reporter.theme}</theme>
+                <theme>UNICODE</theme>
               </statelessTestsetInfoReporter>
             </configuration>
             <executions>
@@ -802,21 +802,21 @@
             <configuration>
               <parallel>classes</parallel>
               <!--suppress MavenModelInspection -->
-              <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
+              <argLine>@{argLine} -Xshare:off -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
               <reportFormat>plain</reportFormat>
               <consoleOutputReporter>
                 <disable>true</disable>
               </consoleOutputReporter>
               <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
-                <hideResultsOnSuccess>${test.reporter.quiet}</hideResultsOnSuccess>
+                <hideResultsOnSuccess>true</hideResultsOnSuccess>
                 <printStacktraceOnError>true</printStacktraceOnError>
                 <printStacktraceOnFailure>true</printStacktraceOnFailure>
                 <printStderrOnError>true</printStderrOnError>
                 <printStderrOnFailure>true</printStderrOnFailure>
                 <printStdoutOnError>true</printStdoutOnError>
                 <printStdoutOnFailure>true</printStdoutOnFailure>
-                <theme>${test.reporter.theme}</theme>
+                <theme>UNICODE</theme>
               </statelessTestsetInfoReporter>
             </configuration>
           </plugin>
