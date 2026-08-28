@@ -57,13 +57,14 @@
     <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
     <version.dep.jacoco>0.8.15</version.dep.jacoco>
     <version.dep.spring-boot>4.1.0</version.dep.spring-boot>
+    <version.dep.surefire-tree-reporter>1.5.1</version.dep.surefire-tree-reporter>
 
     <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
     <version.plugin.clean>3.5.0</version.plugin.clean>
     <version.plugin.checkstyle>3.6.0</version.plugin.checkstyle>
     <version.plugin.compiler>3.15.0</version.plugin.compiler>
     <version.plugin.dependency>3.11.0</version.plugin.dependency>
-    <version.plugin.failsafe>3.5.6</version.plugin.failsafe>
+    <version.plugin.failsafe>${version.plugin.surefire}</version.plugin.failsafe>
     <version.plugin.formatter>2.29.0</version.plugin.formatter>
     <version.plugin.impsort>1.13.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
@@ -71,7 +72,8 @@
     <version.plugin.lombok>1.18.20.0</version.plugin.lombok>
     <version.plugin.source>3.4.0</version.plugin.source>
     <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
-    <version.plugin.surefire>3.5.6</version.plugin.surefire>
+    <!-- Tree reporter plugin is broken on Surefire 3.5.4+, will work again on 3.6.0. -->
+    <version.plugin.surefire>3.5.3</version.plugin.surefire>
   </properties>
 
   <dependencyManagement>
@@ -275,11 +277,32 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>${version.plugin.failsafe}</version>
+            <dependencies>
+              <dependency>
+                <groupId>me.fabriciorby</groupId>
+                <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                <version>${version.dep.surefire-tree-reporter}</version>
+              </dependency>
+            </dependencies>
             <configuration>
               <parallel>classes</parallel>
               <!--suppress MavenModelInspection -->
-                <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
+              <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
+              <reportFormat>plain</reportFormat>
+              <consoleOutputReporter>
+                <disable>true</disable>
+              </consoleOutputReporter>
+              <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+                <hideResultsOnSuccess>${test.reporter.quiet}</hideResultsOnSuccess>
+                <printStacktraceOnError>true</printStacktraceOnError>
+                <printStacktraceOnFailure>true</printStacktraceOnFailure>
+                <printStderrOnError>true</printStderrOnError>
+                <printStderrOnFailure>true</printStderrOnFailure>
+                <printStdoutOnError>true</printStdoutOnError>
+                <printStdoutOnFailure>true</printStdoutOnFailure>
+                <theme>${test.reporter.theme}</theme>
+              </statelessTestsetInfoReporter>
             </configuration>
             <executions>
               <execution>
@@ -769,11 +792,32 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${version.plugin.surefire}</version>
+            <dependencies>
+              <dependency>
+                <groupId>me.fabriciorby</groupId>
+                <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                <version>${version.dep.surefire-tree-reporter}</version>
+              </dependency>
+            </dependencies>
             <configuration>
               <parallel>classes</parallel>
               <!--suppress MavenModelInspection -->
               <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -javaagent:${org.mockito:mockito-core:jar} ${test.args.extra}</argLine>
               <threadCount>4</threadCount>
+              <reportFormat>plain</reportFormat>
+              <consoleOutputReporter>
+                <disable>true</disable>
+              </consoleOutputReporter>
+              <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+                <hideResultsOnSuccess>${test.reporter.quiet}</hideResultsOnSuccess>
+                <printStacktraceOnError>true</printStacktraceOnError>
+                <printStacktraceOnFailure>true</printStacktraceOnFailure>
+                <printStderrOnError>true</printStderrOnError>
+                <printStderrOnFailure>true</printStderrOnFailure>
+                <printStdoutOnError>true</printStdoutOnError>
+                <printStdoutOnFailure>true</printStdoutOnFailure>
+                <theme>${test.reporter.theme}</theme>
+              </statelessTestsetInfoReporter>
             </configuration>
           </plugin>
           <plugin>
