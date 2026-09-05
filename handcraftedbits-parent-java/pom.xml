@@ -56,7 +56,7 @@
     <version.dep.mapstruct>1.6.3</version.dep.mapstruct>
     <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
     <version.dep.jacoco>0.8.15</version.dep.jacoco>
-    <version.dep.spring-boot>4.1.0</version.dep.spring-boot>
+    <version.dep.spring-boot>4.1.1</version.dep.spring-boot>
     <version.dep.surefire-tree-reporter>1.5.1</version.dep.surefire-tree-reporter>
 
     <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
@@ -396,6 +396,10 @@
           <version>${version.dep.immutables}</version>
           <scope>provided</scope>
           <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.jspecify</groupId>
+          <artifactId>jspecify</artifactId>
         </dependency>
         <dependency>
           <groupId>org.mapstruct</groupId>
