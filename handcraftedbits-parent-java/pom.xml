@@ -32,6 +32,8 @@
   </parent>
 
   <properties>
+    <!-- Where the js-project profile unpacks the shared Biome configuration; a build that runs Biome itself points at this. -->
+    <biome.configDirectory>${project.build.directory}/codequality/biome</biome.configDirectory>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.branch.minimum>0.00</coverage.branch.minimum>
     <!--suppress CheckTagEmptyBody -->
@@ -48,7 +50,10 @@
     <test.args.extra></test.args.extra>
     <version.java>25</version.java>
 
+    <version.dep.biome>2.5.13</version.dep.biome>
     <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
+    <!-- Built alongside this POM; ${project.version} would resolve to the version of the project inheriting from it. -->
+    <version.dep.handcraftedbits-java-support>${revision}${changelist}</version.dep.handcraftedbits-java-support>
     <version.dep.immutables>2.12.2</version.dep.immutables>
     <version.dep.junit-pioneer>2.3.0</version.dep.junit-pioneer>
     <!-- Lombok should stay in sync with Spring Boot version. -->
@@ -65,13 +70,13 @@
     <version.plugin.compiler>3.15.0</version.plugin.compiler>
     <version.plugin.dependency>3.11.0</version.plugin.dependency>
     <version.plugin.failsafe>${version.plugin.surefire}</version.plugin.failsafe>
-    <version.plugin.formatter>2.29.0</version.plugin.formatter>
     <version.plugin.impsort>1.13.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
     <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
     <version.plugin.lombok>1.18.20.0</version.plugin.lombok>
     <version.plugin.source>3.4.0</version.plugin.source>
     <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
+    <version.plugin.spotless>3.10.2</version.plugin.spotless>
     <!-- Tree reporter plugin is broken on Surefire 3.5.4+, will work again on 3.6.0. -->
     <version.plugin.surefire>3.5.3</version.plugin.surefire>
   </properties>
@@ -87,6 +92,56 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${version.plugin.spotless}</version>
+        <!-- Configuration is kept here rather than in the execution so that spotless:apply also works when invoked directly. -->
+        <configuration>
+          <formats>
+            <!-- Java and JavaScript are handled by their own formatters, which already cover both of these rules. -->
+            <format>
+              <includes>
+                <include>.editorconfig</include>
+                <include>.gitattributes</include>
+                <include>.gitignore</include>
+                <include>**/*.config</include>
+                <include>**/*.json</include>
+                <include>**/*.md</include>
+                <include>**/*.properties</include>
+                <include>**/*.sh</include>
+                <include>**/*.xml</include>
+                <include>**/*.yml</include>
+              </includes>
+              <excludes>
+                <!-- Generated during the build; formatting them is churn that the next build undoes. -->
+                <exclude>**/.flattened-pom.xml</exclude>
+                <exclude>**/.git-versioned-pom.xml</exclude>
+                <exclude>**/target/**</exclude>
+                <!-- License headers are inserted verbatim, so a trailing newline here would show up in every header. -->
+                <exclude>**/src/main/resources/license/**</exclude>
+              </excludes>
+              <endWithNewline />
+              <trimTrailingWhitespace />
+            </format>
+          </formats>
+          <lineEndings>UNIX</lineEndings>
+        </configuration>
+        <executions>
+          <execution>
+            <id>format-sources</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <profiles>
     <!-- Automatically add Checkstyle suppression file if it exists. -->
@@ -365,6 +420,55 @@
       </build>
     </profile>
 
+    <!-- Dependencies and annotation processing for Java projects that use Immutables. -->
+    <profile>
+      <id>java-immutables-project</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <missing>${basedir}/.handcraftedbits/no-immutables</missing>
+        </file>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.handcraftedbits</groupId>
+          <artifactId>handcraftedbits-java-support-immutables</artifactId>
+          <version>${version.dep.handcraftedbits-java-support}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.immutables</groupId>
+          <artifactId>value</artifactId>
+          <version>${version.dep.immutables}</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${version.plugin.compiler}</version>
+            <configuration>
+              <annotationProcessorPaths combine.children="append">
+                <dependency>
+                  <groupId>com.handcraftedbits</groupId>
+                  <artifactId>handcraftedbits-java-support-codegen-immutables</artifactId>
+                  <version>${version.dep.handcraftedbits-java-support}</version>
+                </dependency>
+                <dependency>
+                  <groupId>org.immutables</groupId>
+                  <artifactId>value</artifactId>
+                  <version>${version.dep.immutables}</version>
+                </dependency>
+              </annotationProcessorPaths>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!-- Basic settings for Java projects -->
     <profile>
       <id>java-project</id>
@@ -381,7 +485,6 @@
           <artifactId>spotbugs-annotations</artifactId>
           <version>${version.dep.spotbugs}</version>
           <scope>provided</scope>
-          <optional>true</optional>
           <exclusions>
             <!-- Doesn't play well with JPMS. -->
             <exclusion>
@@ -389,13 +492,6 @@
               <artifactId>jsr305</artifactId>
             </exclusion>
           </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>org.immutables</groupId>
-          <artifactId>value</artifactId>
-          <version>${version.dep.immutables}</version>
-          <scope>provided</scope>
-          <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.jspecify</groupId>
@@ -406,19 +502,51 @@
           <artifactId>mapstruct</artifactId>
           <version>${version.dep.mapstruct}</version>
           <scope>provided</scope>
-          <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
           <version>${version.dep.lombok}</version>
           <scope>provided</scope>
-          <optional>true</optional>
         </dependency>
       </dependencies>
 
       <build>
         <plugins>
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>${version.plugin.spotless}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.handcraftedbits</groupId>
+                <artifactId>handcraftedbits-codequality</artifactId>
+                <version>${version.dep.handcraftedbits-codequality}</version>
+              </dependency>
+            </dependencies>
+            <configuration>
+              <java>
+                <includes>
+                  <include>src/it/java/**/*.java</include>
+                  <include>src/main/java/**/*.java</include>
+                  <include>src/test/java/**/*.java</include>
+                </includes>
+                <eclipse>
+                  <file>formatter-handcraftedbits.xml</file>
+                </eclipse>
+              </java>
+              <lineEndings>UNIX</lineEndings>
+            </configuration>
+            <executions>
+              <execution>
+                <id>format-sources</id>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-maven-plugin</artifactId>
@@ -457,40 +585,6 @@
                   <removeUnused>true</removeUnused>
                   <staticAfter>false</staticAfter>
                   <staticGroups>*</staticGroups>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>net.revelc.code.formatter</groupId>
-            <artifactId>formatter-maven-plugin</artifactId>
-            <version>${version.plugin.formatter}</version>
-            <dependencies>
-              <dependency>
-                <groupId>com.handcraftedbits</groupId>
-                <artifactId>handcraftedbits-codequality</artifactId>
-                <version>${version.dep.handcraftedbits-codequality}</version>
-              </dependency>
-            </dependencies>
-            <executions>
-              <execution>
-                <id>format-java</id>
-                <goals>
-                  <goal>format</goal>
-                </goals>
-                <configuration>
-                  <configFile>formatter-handcraftedbits.xml</configFile>
-                  <directories>
-                    <directory>${basedir}/src/it/java</directory>
-                    <directory>${basedir}/src/main/java</directory>
-                    <directory>${basedir}/src/test/java</directory>
-                  </directories>
-                  <lineEnding>LF</lineEnding>
-                  <skipCssFormatting>true</skipCssFormatting>
-                  <skipHtmlFormatting>true</skipHtmlFormatting>
-                  <skipJsFormatting>true</skipJsFormatting>
-                  <skipJsonFormatting>true</skipJsonFormatting>
-                  <skipXmlFormatting>true</skipXmlFormatting>
                 </configuration>
               </execution>
             </executions>
@@ -536,11 +630,6 @@
             <configuration>
               <annotationProcessorPaths combine.children="append">
                 <dependency>
-                  <groupId>org.immutables</groupId>
-                  <artifactId>value</artifactId>
-                  <version>${version.dep.immutables}</version>
-                </dependency>
-                <dependency>
                   <groupId>org.mapstruct</groupId>
                   <artifactId>mapstruct-processor</artifactId>
                   <version>${version.dep.mapstruct}</version>
@@ -575,6 +664,75 @@
                       <version>${version.java}</version>
                     </requireJavaVersion>
                   </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Basic settings for Javascript. -->
+    <profile>
+      <id>js-project</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <file>
+          <exists>${basedir}/src/main/js</exists>
+        </file>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>${version.plugin.spotless}</version>
+            <configuration>
+              <javascript>
+                <includes>
+                  <include>src/main/js/**/*.cjs</include>
+                  <include>src/main/js/**/*.js</include>
+                  <include>src/main/js/**/*.mjs</include>
+                </includes>
+                <biome>
+                  <configPath>${biome.configDirectory}</configPath>
+                  <version>${version.dep.biome}</version>
+                </biome>
+              </javascript>
+              <lineEndings>UNIX</lineEndings>
+            </configuration>
+            <executions>
+              <execution>
+                <id>format-sources</id>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${version.plugin.dependency}</version>
+            <executions>
+              <execution>
+                <id>unpack-biome-configuration</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>com.handcraftedbits</groupId>
+                      <artifactId>handcraftedbits-codequality</artifactId>
+                      <version>${version.dep.handcraftedbits-codequality}</version>
+                      <includes>biome/**</includes>
+                      <outputDirectory>${project.build.directory}/codequality</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
                 </configuration>
               </execution>
             </executions>

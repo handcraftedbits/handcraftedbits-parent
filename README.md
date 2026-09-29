@@ -36,7 +36,7 @@ staged in the Portal and published automatically once validation passes.
 
 * **Active by default?**: no
 * **Activated by**: existence of `${basedir}/LICENSE` file
-* **Purpose**: Applies copyright headers to Java, XML, and properties files.
+* **Purpose**: Applies copyright headers to Java, JavaScript, XML, and properties files.
 
 ### Snippets
 

@@ -24,13 +24,29 @@ A parent POM used by HandcraftedBits Java projects.
 * **Purpose**: Adds `src/it/java` and `src/it/resources` as test sources, adds test dependencies (JUnit Jupiter, JUnit Pioneer, AssertJ, Mockito),
   organizes imports, and runs integration tests with `maven-failsafe-plugin`.
 
+## `java-immutables-project`
+
+* **Active by default**: no
+* **Activated by**: absence of `${basedir}/.handcraftedbits/no-immutables` file, so a module that doesn't use Immutables opts out by creating that
+  empty file.  The file only affects the module it is in, not modules beneath it.
+* **Purpose**: Adds [Immutables](https://immutables.github.io/) as an optional `provided` dependency and annotation processor, along with
+  `handcraftedbits-java-support-immutables` as a compile dependency and `handcraftedbits-java-support-codegen-immutables` on the annotation processor
+  path, so that generated code throws `IllegalArgumentException` instead of `NullPointerException` for `null` values.
+
 ## `java-project`
 
 * **Active by default**: no
 * **Activated by**: existence of `${basedir}/src/main/java` directory
 * **Purpose**: Sets and enforces the Java compiler level, adds optional `provided` dependencies and annotation processors (Lombok, MapStruct,
-  Immutables, SpotBugs annotations), and configures source formatting, import organization, [Checkstyle](https://checkstyle.sourceforge.io/), and
+  SpotBugs annotations), and configures source formatting, import organization, [Checkstyle](https://checkstyle.sourceforge.io/), and
   [SpotBugs](https://spotbugs.github.io/).
+
+## `js-project`
+
+* **Active by default**: no
+* **Activated by**: existence of `${basedir}/src/main/js` directory
+* **Purpose**: Unpacks the Biome configuration from the `handcraftedbits-codequality` JAR and formats JavaScript sources (`.cjs`, `.js`, `.mjs`)
+  with [Biome](https://biomejs.dev/) via Spotless.
 
 ## `release`
 
@@ -52,6 +68,12 @@ A parent POM used by HandcraftedBits Java projects.
   `maven-surefire-plugin`.
 
 # Properties
+
+## `biome.configDirectory`
+
+* **Purpose**: Directory the `js-project` profile unpacks the shared Biome configuration into.  A build that runs Biome itself, rather than through
+  Spotless, points at this.
+* **Default value**: `${project.build.directory}/codequality/biome`
 
 ## `checkstyle.suppressions.location`
 
@@ -102,6 +124,11 @@ A parent POM used by HandcraftedBits Java projects.
 * **Default value**: `25`
 
 # Miscellaneous
+
+* Trailing whitespace is removed and a final newline is added to every text file that is not already covered by a language formatter: XML, YAML,
+  JSON, Markdown, `.properties`, `.config`, shell scripts, and the `.editorconfig`/`.gitattributes`/`.gitignore` files at the project root.  Java and
+  JavaScript sources are left to their own formatters, which already apply both rules.  Build output, generated POMs, and license header templates
+  are excluded.
 
 * Add custom Javadoc links to
   [maven-javadoc-plugin](https://maven.apache.org/plugins/maven-javadoc-plugin/) with:
