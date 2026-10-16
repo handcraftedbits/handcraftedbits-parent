@@ -175,6 +175,38 @@
   </build>
 
   <profiles>
+    <!--
+      Docker Desktop puts its socket under the user's home directory and only symlinks it to /var/run/docker.sock when "Allow the default Docker
+      socket to be used" is enabled. docker-maven-plugin looks in the usual places and at DOCKER_HOST, neither of which finds it, so point it there
+      when that socket is the one present.
+    -->
+    <profile>
+      <id>docker-desktop-socket</id>
+      <activation>
+        <file>
+          <exists>${user.home}/.docker/run/docker.sock</exists>
+        </file>
+      </activation>
+      <properties>
+        <docker.host>unix://${user.home}/.docker/run/docker.sock</docker.host>
+      </properties>
+    </profile>
+    <!--
+      Rootless Podman serves the Docker API on a per-user socket under XDG_RUNTIME_DIR (the systemd user unit podman.socket), not at
+      /var/run/docker.sock, so point docker-maven-plugin there when that socket is present.
+    -->
+    <profile>
+      <id>podman-socket</id>
+      <activation>
+        <file>
+          <exists>${env.XDG_RUNTIME_DIR}/podman/podman.sock</exists>
+        </file>
+      </activation>
+      <properties>
+        <docker.host>unix://${env.XDG_RUNTIME_DIR}/podman/podman.sock</docker.host>
+      </properties>
+    </profile>
+
     <!-- Release/deploy to Maven Central -->
     <profile>
       <id>release</id>
