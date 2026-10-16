@@ -12,8 +12,4 @@
       </properties>
     </ref>
   </refs>
-
-  <rev>
-    <version>${version}</version>
-  </rev>
 </configuration>

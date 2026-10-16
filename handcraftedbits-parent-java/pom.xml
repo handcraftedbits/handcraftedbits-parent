@@ -32,8 +32,9 @@
   </parent>
 
   <properties>
-    <!-- Where the js-project profile unpacks the shared Biome configuration; a build that runs Biome itself points at this. -->
     <biome.configDirectory>${project.build.directory}/codequality/biome</biome.configDirectory>
+    <biome.options>--config-path=${biome.configDirectory}/biome.json --vcs-root=${maven.multiModuleProjectDirectory}</biome.options>
+    <biome.sources>src</biome.sources>
     <checkstyle.suppressions.location>checkstyle-handcraftedbits-suppressions.xml</checkstyle.suppressions.location>
     <coverage.branch.minimum>0.00</coverage.branch.minimum>
     <!--suppress CheckTagEmptyBody -->
@@ -50,7 +51,8 @@
     <test.args.extra></test.args.extra>
     <version.java>25</version.java>
 
-    <version.dep.biome>2.5.13</version.dep.biome>
+    <version.dep.biome>2.5.15</version.dep.biome>
+    <version.dep.bun>v1.3.14</version.dep.bun>
     <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
     <!-- Built alongside this POM; ${project.version} would resolve to the version of the project inheriting from it. -->
     <version.dep.handcraftedbits-java-support>${revision}${changelist}</version.dep.handcraftedbits-java-support>
@@ -70,6 +72,7 @@
     <version.plugin.compiler>3.15.0</version.plugin.compiler>
     <version.plugin.dependency>3.11.0</version.plugin.dependency>
     <version.plugin.failsafe>${version.plugin.surefire}</version.plugin.failsafe>
+    <version.plugin.frontend>2.0.2</version.plugin.frontend>
     <version.plugin.impsort>1.13.0</version.plugin.impsort>
     <version.plugin.jacoco>${version.dep.jacoco}</version.plugin.jacoco>
     <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
@@ -102,9 +105,8 @@
         <!-- Configuration is kept here rather than in the execution so that spotless:apply also works when invoked directly. -->
         <configuration>
           <formats>
-            <!-- Java and JavaScript are handled by their own formatters, which already cover both of these rules. -->
             <format>
-              <includes>
+              <includes combine.children="append">
                 <include>.editorconfig</include>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
@@ -116,13 +118,14 @@
                 <include>**/*.xml</include>
                 <include>**/*.yml</include>
               </includes>
-              <excludes>
+              <excludes combine.children="append">
                 <!-- Generated during the build; formatting them is churn that the next build undoes. -->
                 <exclude>**/.flattened-pom.xml</exclude>
                 <exclude>**/.git-versioned-pom.xml</exclude>
-                <exclude>**/target/**</exclude>
-                <!-- License headers are inserted verbatim, so a trailing newline here would show up in every header. -->
+                <exclude>**/.idea/**</exclude>
+                <exclude>**/node_modules/**</exclude>
                 <exclude>**/src/main/resources/license/**</exclude>
+                <exclude>**/target/**</exclude>
               </excludes>
               <endWithNewline />
               <trimTrailingWhitespace />
@@ -678,37 +681,47 @@
       <activation>
         <activeByDefault>false</activeByDefault>
         <file>
-          <exists>${basedir}/src/main/js</exists>
+          <exists>${basedir}/.handcraftedbits/js-project</exists>
         </file>
       </activation>
 
       <build>
         <plugins>
           <plugin>
-            <groupId>com.diffplug.spotless</groupId>
-            <artifactId>spotless-maven-plugin</artifactId>
-            <version>${version.plugin.spotless}</version>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${version.plugin.frontend}</version>
             <configuration>
-              <javascript>
-                <includes>
-                  <include>src/main/js/**/*.cjs</include>
-                  <include>src/main/js/**/*.js</include>
-                  <include>src/main/js/**/*.mjs</include>
-                </includes>
-                <biome>
-                  <configPath>${biome.configDirectory}</configPath>
-                  <version>${version.dep.biome}</version>
-                </biome>
-              </javascript>
-              <lineEndings>UNIX</lineEndings>
+              <bunVersion>${version.dep.bun}</bunVersion>
+              <installDirectory>${project.build.directory}</installDirectory>
             </configuration>
             <executions>
               <execution>
-                <id>format-sources</id>
+                <id>biome-install-bun</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-bun</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>biome-format</id>
                 <phase>process-sources</phase>
                 <goals>
-                  <goal>apply</goal>
+                  <goal>bun</goal>
                 </goals>
+                <configuration>
+                  <arguments>x @biomejs/biome@${version.dep.biome} format --write ${biome.options} ${biome.sources}</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>biome-lint</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>bun</goal>
+                </goals>
+                <configuration>
+                  <arguments>x @biomejs/biome@${version.dep.biome} lint ${biome.options} ${biome.sources}</arguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>

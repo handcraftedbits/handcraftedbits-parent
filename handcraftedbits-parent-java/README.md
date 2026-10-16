@@ -44,9 +44,11 @@ A parent POM used by HandcraftedBits Java projects.
 ## `js-project`
 
 * **Active by default**: no
-* **Activated by**: existence of `${basedir}/src/main/js` directory
-* **Purpose**: Unpacks the Biome configuration from the `handcraftedbits-codequality` JAR and formats JavaScript sources (`.cjs`, `.js`, `.mjs`)
-  with [Biome](https://biomejs.dev/) via Spotless.
+* **Activated by**: existence of `${basedir}/.handcraftedbits/js-project` file, so a module that has JavaScript or TypeScript opts in by creating
+  that empty file.  The file only affects the module it is in, not modules beneath it.
+* **Purpose**: Unpacks the Biome configuration from the `handcraftedbits-codequality` JAR, then runs [Biome](https://biomejs.dev/) through Bun
+  over `biome.sources`: it formats JavaScript and TypeScript (`.cjs`, `.js`, `.mjs`, `.ts`) at `process-sources` and lints them at
+  `process-classes`, failing the build on a lint error.  Files git ignores are left out.
 
 ## `release`
 
@@ -71,9 +73,18 @@ A parent POM used by HandcraftedBits Java projects.
 
 ## `biome.configDirectory`
 
-* **Purpose**: Directory the `js-project` profile unpacks the shared Biome configuration into.  A build that runs Biome itself, rather than through
-  Spotless, points at this.
+* **Purpose**: Directory the `js-project` profile unpacks the shared Biome configuration into.  A build that runs Biome itself points at this.
 * **Default value**: `${project.build.directory}/codequality/biome`
+
+## `biome.options`
+
+* **Purpose**: The options the `js-project` profile passes to Biome: the shared configuration, and git's ignore files from the top of the project.
+* **Default value**: `--config-path=${biome.configDirectory}/biome.json --vcs-root=${maven.multiModuleProjectDirectory}`
+
+## `biome.sources`
+
+* **Purpose**: The paths, relative to the module and separated by spaces, that the `js-project` profile formats and lints.
+* **Default value**: `src`
 
 ## `checkstyle.suppressions.location`
 
