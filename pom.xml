@@ -312,6 +312,7 @@
                         <include>**/src/**/*.java</include>
                         <include>**/src/**/*.js</include>
                         <include>**/src/**/*.mjs</include>
+                        <include>**/src/**/*.py</include>
                         <include>**/src/**/*.sh</include>
                         <include>**/src/**/*.ts</include>
                         <include>**/src/it/**/invoker.properties</include>
@@ -328,11 +329,6 @@
                       </includes>
                     </licenseSet>
                   </licenseSets>
-                  <!--
-                    Mycila's defaults would give c, cpp and h JAVADOC_STYLE, and ts TRIPLESLASH_STYLE, which reads as a reference directive;
-                    cjs, hpp, mjs and Makefile have none. SLASHSTAR_BLANK_LINE_STYLE (slashstarblanklinestyle.xml) adds a blank line after the
-                    header and leaves a #! line first; Java keeps SLASHSTAR_STYLE. Dockerfile and sh keep their default, SCRIPT_STYLE.
-                  -->
                   <mapping>
                     <c>SLASHSTAR_BLANK_LINE_STYLE</c>
                     <cjs>SLASHSTAR_BLANK_LINE_STYLE</cjs>
