@@ -404,6 +404,17 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>${version.plugin.checkstyle}</version>
+            <configuration>
+              <testSourceDirectories>
+                <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
+                <testSourceDirectory>${basedir}/src/it/java</testSourceDirectory>
+              </testSourceDirectories>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${version.plugin.jacoco}</version>
