@@ -51,25 +51,25 @@
     <test.args.extra></test.args.extra>
     <version.java>25</version.java>
 
-    <version.dep.biome>2.5.15</version.dep.biome>
-    <version.dep.bun>v1.3.14</version.dep.bun>
-    <version.dep.checkstyle>13.7.0</version.dep.checkstyle>
+    <version.dep.biome>2.6.2</version.dep.biome>
+    <version.dep.bun>v1.4.4</version.dep.bun>
+    <version.dep.checkstyle>14.3.0</version.dep.checkstyle>
     <!-- Built alongside this POM; ${project.version} would resolve to the version of the project inheriting from it. -->
     <version.dep.handcraftedbits-java-support>${revision}${changelist}</version.dep.handcraftedbits-java-support>
-    <version.dep.immutables>2.12.2</version.dep.immutables>
+    <version.dep.immutables>2.12.3</version.dep.immutables>
     <version.dep.junit-pioneer>2.3.0</version.dep.junit-pioneer>
     <!-- Lombok should stay in sync with Spring Boot version. -->
-    <version.dep.lombok>1.18.46</version.dep.lombok>
+    <version.dep.lombok>1.18.48</version.dep.lombok>
     <version.dep.mapstruct>1.6.3</version.dep.mapstruct>
-    <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
+    <version.dep.spotbugs>4.10.5</version.dep.spotbugs>
     <version.dep.jacoco>0.8.15</version.dep.jacoco>
-    <version.dep.spring-boot>4.1.1</version.dep.spring-boot>
+    <version.dep.spring-boot>4.1.2</version.dep.spring-boot>
     <version.dep.surefire-tree-reporter>2.1.0</version.dep.surefire-tree-reporter>
 
-    <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
+    <version.plugin.build-helper>3.6.2</version.plugin.build-helper>
     <version.plugin.clean>3.5.0</version.plugin.clean>
     <version.plugin.checkstyle>3.6.0</version.plugin.checkstyle>
-    <version.plugin.compiler>3.15.0</version.plugin.compiler>
+    <version.plugin.compiler>3.16.0</version.plugin.compiler>
     <version.plugin.dependency>3.11.0</version.plugin.dependency>
     <version.plugin.failsafe>${version.plugin.surefire}</version.plugin.failsafe>
     <version.plugin.frontend>2.0.2</version.plugin.frontend>
@@ -78,8 +78,8 @@
     <version.plugin.javadoc>3.12.0</version.plugin.javadoc>
     <version.plugin.lombok>1.18.20.0</version.plugin.lombok>
     <version.plugin.source>3.4.0</version.plugin.source>
-    <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
-    <version.plugin.spotless>3.10.2</version.plugin.spotless>
+    <version.plugin.spotbugs>4.10.5.0</version.plugin.spotbugs>
+    <version.plugin.spotless>3.10.4</version.plugin.spotless>
     <version.plugin.surefire>3.6.0</version.plugin.surefire>
   </properties>
 
