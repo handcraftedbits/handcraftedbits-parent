@@ -64,7 +64,7 @@
     <version.dep.spotbugs>4.10.3</version.dep.spotbugs>
     <version.dep.jacoco>0.8.15</version.dep.jacoco>
     <version.dep.spring-boot>4.1.1</version.dep.spring-boot>
-    <version.dep.surefire-tree-reporter>1.5.1</version.dep.surefire-tree-reporter>
+    <version.dep.surefire-tree-reporter>2.1.0</version.dep.surefire-tree-reporter>
 
     <version.plugin.build-helper>3.6.1</version.plugin.build-helper>
     <version.plugin.clean>3.5.0</version.plugin.clean>
@@ -80,8 +80,7 @@
     <version.plugin.source>3.4.0</version.plugin.source>
     <version.plugin.spotbugs>4.10.3.0</version.plugin.spotbugs>
     <version.plugin.spotless>3.10.2</version.plugin.spotless>
-    <!-- Tree reporter plugin is broken on Surefire 3.5.4+, will work again on 3.6.0. -->
-    <version.plugin.surefire>3.5.3</version.plugin.surefire>
+    <version.plugin.surefire>3.6.0</version.plugin.surefire>
   </properties>
 
   <dependencyManagement>
